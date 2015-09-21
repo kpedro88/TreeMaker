@@ -119,9 +119,10 @@ QCD=False,
     ## ----------------------------------------------------------------------------------------------
     ## GenHT for stitching together MC samples
     ## ----------------------------------------------------------------------------------------------
-    process.GenHT = cms.EDProducer('GenHTProducer')
-    process.Baseline += process.GenHT
-    VarsDouble.extend(['GenHT:genHT'])
+    if geninfo:
+        process.GenHT = cms.EDProducer('GenHTProducer')
+        process.Baseline += process.GenHT
+        VarsDouble.extend(['GenHT:genHT'])
     
     ## ----------------------------------------------------------------------------------------------
     ## PrimaryVertices
@@ -470,8 +471,9 @@ QCD=False,
         prescaleTagArg3  = cms.string(''),
         triggerNameList = cms.vstring( # list of trigger names
             'HLT_PFHT350_PFMET100_NoiseCleaned_v',
+            'HLT_PFHT350_PFMET100_JetIdCleaned_v',
             'HLT_PFMET170_NoiseCleaned_v',
-            'HLT_PFMET170_NoiseCleaned_v',
+            'HLT_PFMET170_JetIdCleaned_v',
             'HLT_PFHT350_v',
             'HLT_PFHT800_v',
             'HLT_PFHT900_v',

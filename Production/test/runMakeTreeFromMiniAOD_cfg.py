@@ -4,6 +4,8 @@ parameters = CommandLineParams()
 scenarioName=parameters.value("scenario","")
 inputFilesConfig=parameters.value("inputFilesConfig","")
 dataset=parameters.value("dataset",[])
+nstart = parameters.value("nstart",0)
+nfiles = parameters.value("nfiles",-1)
 numevents=parameters.value("numevents",-1)
 reportfreq=parameters.value("reportfreq",1000)
 outfile=parameters.value("outfile","test_run")
@@ -51,16 +53,25 @@ process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 readFiles = cms.untracked.vstring()
 
 if inputFilesConfig!="" :
-    process.load("TreeMaker.Production."+inputFilesConfig+"_cff")
-    readFiles.extend( process.source.fileNames )
+    if nfiles==-1:
+        process.load("TreeMaker.Production."+inputFilesConfig+"_cff")
+        readFiles.extend( process.source.fileNames )
+    else:
+        readFilesImport = getattr(__import__("TreeMaker.Production."+inputFilesConfig+"_cff",fromlist=["readFiles"]),"readFiles")
+        readFiles.extend( readFilesImport[nstart:(nstart+nfiles)] )
 
 if dataset!=[] :    
     readFiles.extend( [dataset] )
 
+#temporary redirector fix
+for f,val in enumerate(readFiles):
+    if readFiles[f][0:6]=="/store":
+        readFiles[f] = "root://cmsxrootd.fnal.gov/"+readFiles[f]
+    
 # print out settings
 print "***** SETUP ************************************"
 print " dataset: "+str(readFiles)
-print " outfile: "+outfile
+print " outfile: "+outfile+"_RA2AnalysisTree"
 print " "
 print " storing lostlepton variables: "+str(lostlepton)
 print " storing hadtau variables: "+str(hadtau)
