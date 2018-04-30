@@ -39,12 +39,13 @@
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/EgammaCandidates/interface/Conversion.h"
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterLazyTools.h"
+#include "RecoEcal/EgammaCoreTools/interface/EcalClusterLazyToolsHelper.h"
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
 #include "RecoEgamma/EgammaTools/interface/ConversionTools.h"
 
 #include <vector>
 
-class PhotonIDisoProducer : public edm::global::EDProducer<> {
+class PhotonIDisoProducer : public edm::global::EDProducer<edm::StreamCache<EcalClusterLazyToolsHelper<noZS::EcalClusterLazyTools>>> {
 
 public:
   explicit PhotonIDisoProducer(const edm::ParameterSet&);
@@ -54,7 +55,9 @@ public:
 
 private:
   void produce(edm::StreamID, edm::Event&, const edm::EventSetup&) const override;
-  
+  std::unique_ptr<EcalClusterLazyToolsHelper<noZS::EcalClusterLazyTools>> beginStream(edm::StreamID) const override { 
+    return std::make_unique<EcalClusterLazyToolsHelper<noZS::EcalClusterLazyTools>>(); 
+  }
   bool hasMatchedPromptElectron(const reco::SuperClusterRef &sc, const edm::Handle<std::vector<pat::Electron> > &eleCol,
 				const edm::Handle<reco::ConversionCollection> &convCol, const math::XYZPoint &beamspot,
 				float lxyMin=2.0, float probMin=1e-6, unsigned int nHitsBeforeVtxMax=0) const;
@@ -174,7 +177,7 @@ PhotonIDisoProducer::~PhotonIDisoProducer()
 
 // ------------ method called for each event  ------------
 void
-PhotonIDisoProducer::produce(edm::StreamID, edm::Event& iEvent, const edm::EventSetup& iSetup) const
+PhotonIDisoProducer::produce(edm::StreamID id, edm::Event& iEvent, const edm::EventSetup& iSetup) const
 {
 
   using namespace edm;
@@ -214,7 +217,9 @@ PhotonIDisoProducer::produce(edm::StreamID, edm::Event& iEvent, const edm::Event
   if( debug ) edm::LogInfo("TreeMaker") << "got photon collection";
 
   /// setup cluster tools
-  noZS::EcalClusterLazyTools clusterTools_(iEvent, iSetup, ecalRecHitsInputTag_EB_Token_, ecalRecHitsInputTag_EE_Token_);
+  auto helper = streamCache(id);
+  const auto& clusterTools_ = helper->getTools(iEvent, iSetup, ecalRecHitsInputTag_EB_Token_, ecalRecHitsInputTag_EE_Token_);
+
   for(const auto& iPhoton : *photonCands){
 
     if( debug ) {
