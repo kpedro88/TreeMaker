@@ -39,6 +39,7 @@ def reclusterZinv(self, process, cleanedCandidates, suff):
 		associateTask = False,
 		verbosity = 2 if self.verbose else 0,
     )
+    process.puppi.useExistingWeights = cms.bool(True)
     JetAK8CleanTag = cms.InputTag("packedPatJetsAK8PFPuppiCleanSoftDrop")
 
     process = self.makeJetVarsAK8(process,
