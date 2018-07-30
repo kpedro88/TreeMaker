@@ -201,7 +201,7 @@ def makeJetVars(self, process, JetTag, suff, skipGoodJets, storeProperties, Skip
 
 def makeJetVarsAK8(self, process, JetTag, suff, storeProperties):
     # get more substructure
-    if self.semivisible:
+    if self.semivisible>0:
         BasicSubstructure = cms.EDProducer("BasicSubstructureProducer",
             JetTag = JetTag
         )
@@ -261,7 +261,7 @@ def makeJetVarsAK8(self, process, JetTag, suff, storeProperties):
             'JetProperties'+suff+':subjets(Jets'+suff+'_subjets)',
         ])
 
-        if self.semivisible:
+        if self.semivisible>0:
             JetPropertiesAK8.properties.extend([
                 'overflow',
                 'girth',
@@ -290,9 +290,11 @@ def makeJetVarsAK8(self, process, JetTag, suff, storeProperties):
             self.VectorInt.extend([
                 'JetProperties'+suff+':multiplicity(Jets'+suff+'_multiplicity)',
             ])
-#            self.VectorVectorTLorentzVector.extend([
-#                'JetProperties'+suff+':constituents(Jets'+suff+'_constituents)',
-#            ])
+            if self.semivisible==2:
+                JetPropertiesAK8.properties.extend(['constituents'])
+                self.VectorVectorTLorentzVector.extend([
+                    'JetProperties'+suff+':constituents(Jets'+suff+'_constituents)',
+                ])
         setattr(process,"JetProperties"+suff,JetPropertiesAK8)
 
     return process        

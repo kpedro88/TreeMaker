@@ -824,7 +824,7 @@ def makeTreeFromMiniAOD(self,process):
     ## ----------------------------------------------------------------------------------------------
     ## Semi-visible jets
     ## ----------------------------------------------------------------------------------------------
-    if self.semivisible:
+    if self.semivisible>0:
         process.HiddenSector = cms.EDProducer("HiddenSectorProducer",
             JetTag = JetAK8Tag,
             MetTag = METTag,
@@ -839,50 +839,51 @@ def makeTreeFromMiniAOD(self,process):
             'HiddenSector:DeltaPhi2(DeltaPhi2_AK8)',
             'HiddenSector:DeltaPhiMin(DeltaPhiMin_AK8)',
         ])
+        
+        if self.semivisible>=3:
+            # cluster AK4 jets into CA11 jets
+            from RecoJets.JetProducers.ca4PFJets_cfi import ca4PFJets
+            process.ca11PFJets = ca4PFJets.clone(
+                src = JetTag,
+                rParam = cms.double(1.1),
+            )
+            from PhysicsTools.PatAlgos.tools.jetTools import addJetCollection
+            addJetCollection(
+                process,
+                labelName = 'CA11PF',
+                jetSource = cms.InputTag("ca11PFJets"),
+                pfCandidates = JetTag,
+                pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
+                svSource = cms.InputTag('slimmedSecondaryVertices'),
+                algo = 'CA',
+                rParam = 1.1,
+                getJetMCFlavour = True,
+                genParticles = cms.InputTag('prunedGenParticles'),
+                jetCorrections = None,
+                btagDiscriminators = None,
+                muSource = cms.InputTag("slimmedMuons"),
+                elSource = cms.InputTag("slimmedElectrons"),
+            )
+            getattr(process,'patJetsCA11PF').addGenPartonMatch = cms.bool(False)
+            getattr(process,'patJetsCA11PF').addGenJetMatch = cms.bool(False)
+            process.reclusteredJetsCA11 = cms.EDFilter("PATJetSelector",
+                src = cms.InputTag("patJetsCA11PF"),
+                cut = cms.string("pt>170.")
+            )
+            JetCA11Tag = cms.InputTag("reclusteredJetsCA11")
+            self.VectorRecoCand.extend([JetCA11Tag.value()+'(JetsCA11)'])
 
-        # cluster AK4 jets into CA11 jets
-        from RecoJets.JetProducers.ca4PFJets_cfi import ca4PFJets
-        process.ca11PFJets = ca4PFJets.clone(
-            src = JetTag,
-            rParam = cms.double(1.1),
-        )
-        from PhysicsTools.PatAlgos.tools.jetTools import addJetCollection
-        addJetCollection(
-            process,
-            labelName = 'CA11PF',
-            jetSource = cms.InputTag("ca11PFJets"),
-            pfCandidates = JetTag,
-            pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
-            svSource = cms.InputTag('slimmedSecondaryVertices'),
-            algo = 'CA',
-            rParam = 1.1,
-            getJetMCFlavour = True,
-            genParticles = cms.InputTag('prunedGenParticles'),
-            jetCorrections = None,
-            btagDiscriminators = None,
-            muSource = cms.InputTag("slimmedMuons"),
-            elSource = cms.InputTag("slimmedElectrons"),
-        )
-        getattr(process,'patJetsCA11PF').addGenPartonMatch = cms.bool(False)
-        getattr(process,'patJetsCA11PF').addGenJetMatch = cms.bool(False)
-        process.reclusteredJetsCA11 = cms.EDFilter("PATJetSelector",
-            src = cms.InputTag("patJetsCA11PF"),
-            cut = cms.string("pt>170.")
-        )
-        JetCA11Tag = cms.InputTag("reclusteredJetsCA11")
-        self.VectorRecoCand.extend([JetCA11Tag.value()+'(JetsCA11)'])
-
-        process.HiddenSectorCA11 = process.HiddenSector.clone(
-            JetTag = JetCA11Tag,
-        )
-        self.VarsDouble.extend([
-            'HiddenSectorCA11:MJJ(MJJ_CA11)',
-            'HiddenSectorCA11:Mmc(Mmc_CA11)',
-            'HiddenSectorCA11:MT(MT_CA11)',
-            'HiddenSectorCA11:DeltaPhi1(DeltaPhi1_CA11)',
-            'HiddenSectorCA11:DeltaPhi2(DeltaPhi2_CA11)',
-            'HiddenSectorCA11:DeltaPhiMin(DeltaPhiMin_CA11)',
-        ])
+            process.HiddenSectorCA11 = process.HiddenSector.clone(
+                JetTag = JetCA11Tag,
+            )
+            self.VarsDouble.extend([
+                'HiddenSectorCA11:MJJ(MJJ_CA11)',
+                'HiddenSectorCA11:Mmc(Mmc_CA11)',
+                'HiddenSectorCA11:MT(MT_CA11)',
+                'HiddenSectorCA11:DeltaPhi1(DeltaPhi1_CA11)',
+                'HiddenSectorCA11:DeltaPhi2(DeltaPhi2_CA11)',
+                'HiddenSectorCA11:DeltaPhiMin(DeltaPhiMin_CA11)',
+            ])
 
     ## ----------------------------------------------------------------------------------------------
     ## ----------------------------------------------------------------------------------------------

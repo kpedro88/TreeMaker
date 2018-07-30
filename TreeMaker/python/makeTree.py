@@ -34,7 +34,7 @@ class makeTree:
 
         # special signal stuff
         self.getParamDefault("systematics",True);
-        self.getParamDefault("semivisible",True);
+        self.getParamDefault("semivisible",0);
         
         # compute the PDF weights
         self.getParamDefault("doPDFs", True);
