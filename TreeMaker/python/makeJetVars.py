@@ -226,6 +226,7 @@ def makeJetVarsAK8(self, process, JetTag, suff, storeProperties):
             'BasicSubstructure'+suff+':ptD',
             'BasicSubstructure'+suff+':axismajor',
             'BasicSubstructure'+suff+':axisminor',
+            'BasicSubstructure'+suff+':ptdrlog',
             'NjettinessBeta1'+suff+':tau1etaAxis1',
             'NjettinessBeta1'+suff+':tau1phiAxis1',
             'NjettinessBeta2'+suff+':tau1etaAxis1',
@@ -287,6 +288,7 @@ def makeJetVarsAK8(self, process, JetTag, suff, storeProperties):
                 'axismajor',
                 'axisminor',
                 'multiplicity',
+                'ptdrlog',
                 'lean',
             ])
             JetPropertiesAK8.overflow = cms.vstring('BasicSubstructure'+suff+':overflow')
@@ -296,6 +298,7 @@ def makeJetVarsAK8(self, process, JetTag, suff, storeProperties):
             JetPropertiesAK8.axismajor = cms.vstring('BasicSubstructure'+suff+':axismajor')
             JetPropertiesAK8.axisminor = cms.vstring('BasicSubstructure'+suff+':axisminor')
             JetPropertiesAK8.multiplicity = cms.vstring('BasicSubstructure'+suff+':multiplicity')
+            JetPropertiesAK8.ptdrlog = cms.vstring('BasicSubstructure'+suff+':ptdrlog')
             JetPropertiesAK8.lean = cms.vstring(
                 'NjettinessBeta1'+suff+':tau1etaAxis1',
                 'NjettinessBeta1'+suff+':tau1phiAxis1',
@@ -309,6 +312,7 @@ def makeJetVarsAK8(self, process, JetTag, suff, storeProperties):
                 'JetProperties'+suff+':ptD(Jets'+suff+'_ptD)',
                 'JetProperties'+suff+':axismajor(Jets'+suff+'_axismajor)',
                 'JetProperties'+suff+':axisminor(Jets'+suff+'_axisminor)',
+                'JetProperties'+suff+':ptdrlog(Jets'+suff+'_ptdrlog)',
                 'JetProperties'+suff+':lean(Jets'+suff+'_lean)',
             ])
             self.VectorInt.extend([
