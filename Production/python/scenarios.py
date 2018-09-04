@@ -2,7 +2,7 @@ class Scenario:
     def __init__(self,sname):
         if sname == "Summer16MiniAODv3":
             self.set_vars(
-                globaltag="80X_mcRun2_asymptotic_2016_TrancheIV_v6",
+                globaltag="94X_mcRun2_asymptotic_v3",
                 tagname="PAT",
                 hlttagname="HLT",
                 geninfo=True,
@@ -14,7 +14,7 @@ class Scenario:
             )
         elif sname == "Summer16MiniAODv3sig":
             self.set_vars(
-                globaltag="80X_mcRun2_asymptotic_2016_TrancheIV_v6",
+                globaltag="94X_mcRun2_asymptotic_v3",
                 tagname="PAT",
                 hlttagname="HLT",
                 geninfo=True,
@@ -27,7 +27,7 @@ class Scenario:
             )
         elif sname == "2016MiniAODv3":
             self.set_vars(
-                globaltag="80X_dataRun2_2016SeptRepro_v7",
+                globaltag="94X_dataRun2_v10",
                 tagname="PAT",
                 hlttagname="HLT",
                 jsonfile="data/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt",
