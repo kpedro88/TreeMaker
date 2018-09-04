@@ -275,6 +275,8 @@ def getWeightProducer(fileName,fastsim=False, pmssm=False):
         MCSample("rpv_stop_650_t3j_uds", "", "", "Constant", 59334),
         MCSample("rpv_stop_750_t3j_uds", "", "", "Constant", 58016),
         MCSample("rpv_stop_850_t3j_uds", "", "", "Constant", 57069),
+        MCSample("step4_MINIAOD_2016_mZprime-3000_mDark-20_rinv-0.3_alpha-0.2_n-1000", "ProductionV3", "", "Constant", 48974),
+        MCSample("step4_MINIAOD_mZprime-3000_mDark-20_rinv-0.3_alpha-0.2_n-1000", "ProductionV3", "", "Constant", 48914),
     ]
     
     # loop over all samples until we find a match
