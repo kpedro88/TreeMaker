@@ -20,6 +20,7 @@
 
 // system include files
 #include <memory>
+#include <iostream>
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -167,16 +168,19 @@ GoodJetsProducer::filter(edm::StreamID, edm::Event& iEvent, const edm::EventSetu
       prodJets->reserve(Jets->size());
       jetsMask->reserve(Jets->size());
       leptonMask->reserve(Jets->size());
+      int counter = -1;
       for(const auto & iJet : *Jets)
       {
-         if (std::abs(iJet.eta())>maxEta_) continue;
+         ++counter;
+         if (std::abs(iJet.eta())>maxEta_) { std::cout << "Discarded jet " << counter << ": eta = " << std::abs(iJet.eta()) << " > max = " << maxEta_ << std::endl; continue;}
          if (!saveAllPt_ &&
               ( (!invertJetPtFilter_ && iJet.pt() <= jetPtFilter_) ||
-                (invertJetPtFilter_ && iJet.pt() > jetPtFilter_) ) ) continue;
-         if (!iJet.isPFJet()) continue;
+                (invertJetPtFilter_ && iJet.pt() > jetPtFilter_) ) ) { std::cout << "Discarded jet " << counter << ": pt = " << iJet.pt() << (invertJetPtFilter_ ? " > " : " <= ") << "ptfilter = " << jetPtFilter_ << std::endl; continue; }
+         if (!iJet.isPFJet()) { std::cout << "Discarded jet " << counter << ": is not PFJet" << std::endl; continue; }
          //check for a candidate with infinite energy, drop the associated jet
          if(iJet.numberOfDaughters()>0 and std::isinf(iJet.daughterPtr(0)->energy())){
             inf_result = true;
+            std::cout << "Discarded jet " << counter << ": candidate with infinite energy" << std::endl;
             continue;
          }
          float neufrac=iJet.neutralHadronEnergyFraction();//gives raw energy in the denominator
