@@ -127,7 +127,7 @@ class TreeObjectComp {
 };
 
 //class template for tree objects
-template <class T>
+template <class Tin, class Tout=Tin>
 class TreeObject : public TreeObjectBase {
 	public:
 		//constructor
@@ -168,14 +168,17 @@ class TreeObject : public TreeObjectBase {
 			FinalizeName(nameCache,message);
 		}
 		virtual void SetConsumes(edm::ConsumesCollector && iC){
-			tok = iC.consumes<T>(tag);
+			tok = iC.consumes<Tin>(tag);
 		}
-		void FillTree(const edm::Event& iEvent) override{
+		void GetValue(const edm::Handle<Tin>& var) {
+			value = *var;
+		}
+		void FillTree(const edm::Event& iEvent) override {
 			SetDefault();
-			edm::Handle<T> var;
+			edm::Handle<Tin> var;
 			iEvent.getByToken(tok,var);
 			if( var.isValid() ) {
-				value = *var;
+				GetValue(var);
 			}
 			else {
 				edm::LogWarning("TreeMaker") << "WARNING ... " << tagName << " is NOT valid?!";
@@ -187,81 +190,111 @@ class TreeObject : public TreeObjectBase {
 		
 	protected:
 		//member variables
-		T value;
-		edm::EDGetTokenT<T> tok;
+		Tout value;
+		edm::EDGetTokenT<Tin> tok;
 };
+
+//typedefs
+typedef TreeObject<bool> TreeObjectBool;
+typedef TreeObject<int> TreeObjectInt;
+typedef TreeObject<double,float> TreeObjectDouble;
+typedef TreeObject<string> TreeObjectString;
+typedef TreeObject<TLorentzVector> TreeObjectTLV;
+typedef TreeObject<vector<bool>> TreeObjectVBool;
+typedef TreeObject<vector<int>> TreeObjectVInt;
+typedef TreeObject<vector<double>,vector<float>> TreeObjectVDouble;
+typedef TreeObject<vector<string>> TreeObjectVString;
+typedef TreeObject<vector<TLorentzVector>> TreeObjectVTLV;
+typedef TreeObject<vector<vector<bool>>> TreeObjectVVBool;
+typedef TreeObject<vector<vector<int>>> TreeObjectVVInt;
+typedef TreeObject<vector<vector<double>>,vector<vector<float>>> TreeObjectVVDouble;
+typedef TreeObject<vector<vector<string>>> TreeObjectVVString;
+typedef TreeObject<vector<vector<TLorentzVector>>> TreeObjectVVTLV;
+
+//convert double to float
+template<>
+void TreeObjectVDouble::GetValue(const edm::Handle<vector<double>>& var) {
+	value = vector<float>(var->begin(),var->end());
+}
+template<>
+void TreeObjectVVDouble::GetValue(const edm::Handle<vector<vector<double>>>& var) {
+	value.reserve(var->size());
+	for(const auto& ivar: *var){
+		value.emplace_back(ivar.begin(),ivar.end());
+	}
+}
 
 //specialize!
 
 template<>
-void TreeObject<bool>::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),&value,(nameInTree+"/O").c_str()); }
+void TreeObjectBool::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),&value,(nameInTree+"/O").c_str()); }
 template<>
-void TreeObject<int>::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),&value,(nameInTree+"/I").c_str()); }
+void TreeObjectInt::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),&value,(nameInTree+"/I").c_str()); }
 template<>
-void TreeObject<double>::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),&value,(nameInTree+"/D").c_str()); }
+void TreeObjectDouble::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),&value,(nameInTree+"/F").c_str()); }
 template<>
-void TreeObject<string>::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),nameInTree.c_str(),&value); }
+void TreeObjectString::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),nameInTree.c_str(),&value); }
 template<>
-void TreeObject<TLorentzVector>::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),nameInTree.c_str(),&value); }
+void TreeObjectTLV::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),nameInTree.c_str(),&value); }
 template<>
-void TreeObject<vector<bool> >::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<bool>",&value,32000,0); }
+void TreeObjectVBool::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<bool>",&value,32000,0); }
 template<>
-void TreeObject<vector<int> >::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<int>",&value,32000,0); }
+void TreeObjectVInt::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<int>",&value,32000,0); }
 template<>
-void TreeObject<vector<double> >::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<double>",&value,32000,0); }
+void TreeObjectVDouble::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<float>",&value,32000,0); }
 template<>
-void TreeObject<vector<string> >::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<string>",&value,32000,0); }
+void TreeObjectVString::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<string>",&value,32000,0); }
 template<>
-void TreeObject<vector<TLorentzVector> >::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<TLorentzVector>",&value,32000,0); }
+void TreeObjectVTLV::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<TLorentzVector>",&value,32000,0); }
 template<>
-void TreeObject<vector<vector<bool>>>::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<vector<bool>>",&value,32000,0); }
+void TreeObjectVVBool::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<vector<bool>>",&value,32000,0); }
 template<>
-void TreeObject<vector<vector<int>>>::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<vector<int>>",&value,32000,0); }
+void TreeObjectVVInt::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<vector<int>>",&value,32000,0); }
 template<>
-void TreeObject<vector<vector<double>>>::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<vector<double>>",&value,32000,0); }
+void TreeObjectVVDouble::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<vector<float>>",&value,32000,0); }
 template<>
-void TreeObject<vector<vector<string>>>::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<vector<string>>",&value,32000,0); }
+void TreeObjectVVString::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<vector<string>>",&value,32000,0); }
 template<>
-void TreeObject<vector<vector<TLorentzVector>>>::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<vector<TLorentzVector>>",&value,32000,0); }
+void TreeObjectVVTLV::AddBranch() { if(tree) tree->Branch(nameInTree.c_str(),"vector<vector<TLorentzVector>>",&value,32000,0); }
 
 template<>
-void TreeObject<bool>::SetDefault() { value = false; }
+void TreeObjectBool::SetDefault() { value = false; }
 template<>
-void TreeObject<int>::SetDefault() { value = 9999; }
+void TreeObjectInt::SetDefault() { value = 9999; }
 template<>
-void TreeObject<double>::SetDefault() { value = 9999.; }
+void TreeObjectDouble::SetDefault() { value = 9999.; }
 template<>
-void TreeObject<string>::SetDefault() { value = ""; }
+void TreeObjectString::SetDefault() { value = ""; }
 template<>
-void TreeObject<TLorentzVector>::SetDefault() { value.SetXYZT(0,0,0,0); }
+void TreeObjectTLV::SetDefault() { value.SetXYZT(0,0,0,0); }
 template<>
-void TreeObject<vector<bool> >::SetDefault() { value.clear(); }
+void TreeObjectVBool::SetDefault() { value.clear(); }
 template<>
-void TreeObject<vector<int> >::SetDefault() { value.clear(); }
+void TreeObjectVInt::SetDefault() { value.clear(); }
 template<>
-void TreeObject<vector<double> >::SetDefault() { value.clear(); }
+void TreeObjectVDouble::SetDefault() { value.clear(); }
 template<>
-void TreeObject<vector<string> >::SetDefault() { value.clear(); }
+void TreeObjectVString::SetDefault() { value.clear(); }
 template<>
-void TreeObject<vector<TLorentzVector> >::SetDefault() { value.clear(); }
+void TreeObjectVTLV::SetDefault() { value.clear(); }
 template<>
-void TreeObject<vector<vector<bool>>>::SetDefault() { value.clear(); }
+void TreeObjectVVBool::SetDefault() { value.clear(); }
 template<>
-void TreeObject<vector<vector<int>>>::SetDefault() { value.clear(); }
+void TreeObjectVVInt::SetDefault() { value.clear(); }
 template<>
-void TreeObject<vector<vector<double>>>::SetDefault() { value.clear(); }
+void TreeObjectVVDouble::SetDefault() { value.clear(); }
 template<>
-void TreeObject<vector<vector<string>>>::SetDefault() { value.clear(); }
+void TreeObjectVVString::SetDefault() { value.clear(); }
 template<>
-void TreeObject<vector<vector<TLorentzVector>>>::SetDefault() { value.clear(); }
+void TreeObjectVVTLV::SetDefault() { value.clear(); }
 
 //derived version of vector<TLorentzVector> for RecoCand
 //with switch for vector<double> pt, eta, phi, energy instead
-class TreeRecoCand : public TreeObject<vector<TLorentzVector> > {
+class TreeRecoCand : public TreeObjectVTLV {
 	public:
 		//constructor
-		TreeRecoCand() : TreeObject<vector<TLorentzVector> >() {}
-		TreeRecoCand(string tempFull_, bool doLorentz_=true) : TreeObject<vector<TLorentzVector> >(tempFull_), doLorentz(doLorentz_) {}
+		TreeRecoCand() : TreeObjectVTLV() {}
+		TreeRecoCand(string tempFull_, bool doLorentz_=true) : TreeObjectVTLV(tempFull_), doLorentz(doLorentz_) {}
 		//destructor
 		~TreeRecoCand() override {}
 		
@@ -271,7 +304,7 @@ class TreeRecoCand : public TreeObject<vector<TLorentzVector> > {
 		}
 		void FillTree(const edm::Event& iEvent) override{
 			SetDefault();
-			edm::Handle< edm::View<reco::Candidate> > cands;
+			edm::Handle<edm::View<reco::Candidate>> cands;
 			iEvent.getByToken(candTok,cands);
 			if( cands.isValid() ) {
 				if(doLorentz){

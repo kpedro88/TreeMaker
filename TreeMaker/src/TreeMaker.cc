@@ -53,7 +53,7 @@ TreeMaker::TreeMaker(const edm::ParameterSet& iConfig) :
 	stringstream skipMessage;
 	stringstream message;
 	for(unsigned v = 0; v < VarTypeNames.size(); ++v){
-		vector<string> VarNames = iConfig.getParameter< vector<string> >(VarTypeNames.at(v));
+		vector<string> VarNames = iConfig.getParameter<vector<string>>(VarTypeNames.at(v));
 		message << VarTypeNames.at(v) << ":" << "\n";
 		for(const auto & VarName : VarNames){
 			//check for an exact repeat of an existing name
@@ -65,21 +65,21 @@ TreeMaker::TreeMaker(const edm::ParameterSet& iConfig) :
 			//check for the right type
 			TreeObjectBase* tmp = nullptr;
 			switch(VarTypes[v]){
-				case TreeTypes::t_bool     : tmp = new TreeObject<bool>(VarName); break;
-				case TreeTypes::t_int      : tmp = new TreeObject<int>(VarName); break;
-				case TreeTypes::t_double   : tmp = new TreeObject<double>(VarName); break;
-				case TreeTypes::t_string   : tmp = new TreeObject<string>(VarName); break;
-				case TreeTypes::t_lorentz  : tmp = new TreeObject<TLorentzVector>(VarName); break;
-				case TreeTypes::t_vbool    : tmp = new TreeObject<vector<bool> >(VarName); break;
-				case TreeTypes::t_vint     : tmp = new TreeObject<vector<int> >(VarName); break;
-				case TreeTypes::t_vdouble  : tmp = new TreeObject<vector<double> >(VarName); break;
-				case TreeTypes::t_vstring  : tmp = new TreeObject<vector<string> >(VarName); break;
-				case TreeTypes::t_vlorentz : tmp = new TreeObject<vector<TLorentzVector> >(VarName); break;
-				case TreeTypes::t_vvbool   : tmp = new TreeObject<vector<vector<bool>>>(VarName); break;
-				case TreeTypes::t_vvint    : tmp = new TreeObject<vector<vector<int>>>(VarName); break;
-				case TreeTypes::t_vvdouble : tmp = new TreeObject<vector<vector<double>>>(VarName); break;
-				case TreeTypes::t_vvstring : tmp = new TreeObject<vector<vector<string>>>(VarName); break;
-				case TreeTypes::t_vvlorentz: tmp = new TreeObject<vector<vector<TLorentzVector>>>(VarName); break;
+				case TreeTypes::t_bool     : tmp = new TreeObjectBool(VarName); break;
+				case TreeTypes::t_int      : tmp = new TreeObjectInt(VarName); break;
+				case TreeTypes::t_double   : tmp = new TreeObjectDouble(VarName); break;
+				case TreeTypes::t_string   : tmp = new TreeObjectString(VarName); break;
+				case TreeTypes::t_lorentz  : tmp = new TreeObjectTLV(VarName); break;
+				case TreeTypes::t_vbool    : tmp = new TreeObjectVBool(VarName); break;
+				case TreeTypes::t_vint     : tmp = new TreeObjectVInt(VarName); break;
+				case TreeTypes::t_vdouble  : tmp = new TreeObjectVDouble(VarName); break;
+				case TreeTypes::t_vstring  : tmp = new TreeObjectVString(VarName); break;
+				case TreeTypes::t_vlorentz : tmp = new TreeObjectVTLV(VarName); break;
+				case TreeTypes::t_vvbool   : tmp = new TreeObjectVVBool(VarName); break;
+				case TreeTypes::t_vvint    : tmp = new TreeObjectVVInt(VarName); break;
+				case TreeTypes::t_vvdouble : tmp = new TreeObjectVVDouble(VarName); break;
+				case TreeTypes::t_vvstring : tmp = new TreeObjectVVString(VarName); break;
+				case TreeTypes::t_vvlorentz: tmp = new TreeObjectVVTLV(VarName); break;
 				case TreeTypes::t_recocand : tmp = new TreeRecoCand(VarName,doLorentz); break;
 			}
 			//if a known type was found, initialize and store the object
