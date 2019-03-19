@@ -39,7 +39,7 @@ private:
     //               std::unique_ptr<std::vector<int>>&, std::unique_ptr<std::vector<int>>&,
     //               std::unique_ptr<std::vector<int>>&, std::unique_ptr<std::vector<int>>&,
     //               std::unordered_set<const reco::Candidate *>&) const;
-    reco::GenParticle findLast(const reco::GenParticle& particle) const;
+    const reco::GenParticle* findLast(const reco::GenParticle& particle) const;
     void saveChain(int depth, int parentId, int parent_idx, const reco::GenParticle& particle, std::unique_ptr<std::vector<TLorentzVector>>& genParticle_vec,
                    std::unique_ptr<std::vector<int>>& PdgId_vec, std::unique_ptr<std::vector<int>>& Status_vec,
                    std::unique_ptr<std::vector<int>>& Parent_vec, std::unique_ptr<std::vector<int>>& ParentId_vec,
@@ -240,29 +240,29 @@ enum particle_type
 //   https://github.com/cms-sw/cmssw/blob/master/DataFormats/Candidate/interface/CompositeRefCandidateT.h
 //   https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideCandidateModules#ParticleTreeDrawer_Utility
 //   https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuidePATMCMatchingExercise
-reco::GenParticle GenParticlesProducer::findLast(const reco::GenParticle& particle) const {
-    auto last = particle;
+const reco::GenParticle* GenParticlesProducer::findLast(const reco::GenParticle& particle) const {
+    const reco::GenParticle* last = &particle;
     bool resetLast = false;
     const reco::GenParticle *daughter;
-    edm::LogInfo("TreeMaker") << "Found a " << last.pdgId() << " (status=" << last.status() << ", ndaughters=" << last.numberOfDaughters() << "):";
+    edm::LogInfo("TreeMaker") << "Found a " << last->pdgId() << " (status=" << last->status() << ", ndaughters=" << last->numberOfDaughters() << "):";
     while (true) {
         resetLast=false;
-        for(unsigned int iDau=0; iDau<last.numberOfDaughters(); iDau++) {
-            daughter = static_cast<const reco::GenParticle *>(last.daughter(iDau));
-            if(daughter->pdgId()==last.pdgId()) {
-                last = *daughter;
+        for(unsigned int iDau=0; iDau<last->numberOfDaughters(); iDau++) {
+            daughter = static_cast<const reco::GenParticle *>(last->daughter(iDau));
+            if(daughter->pdgId()==last->pdgId()) {
+                last = daughter;
                 resetLast = true;
-                edm::LogInfo("TreeMaker") << "   reset to " << last.pdgId() << "(status=" << last.status() << ")";
+                edm::LogInfo("TreeMaker") << "   reset to " << last->pdgId() << "(status=" << last->status() << ")";
             }
         }
         if(!resetLast) break;
     }
-    if((last.pdgId() == bottom && last.status()!=71) ||
-       (last.pdgId() == top && last.status()!=62) ||
-       (last.pdgId() == W && (last.status()!=22 && last.status()!=52)) ||
-       ((last.pdgId() >= electron && last.pdgId() <= tau_neutrino) && (last.status() != 1 || last.status() != 2)) ||
-       ((last.pdgId() >= down && last.pdgId() <= charm) && last.status() != 71)) {
-        edm::LogInfo("TreeMaker") << "WARNING The last particle in the chain (" << last.pdgId() << ") does not have a status that corresponds to its type (status=" << last.status() << ")";
+    if((last->pdgId() == bottom && last->status()!=71) ||
+       (last->pdgId() == top && last->status()!=62) ||
+       (last->pdgId() == W && (last->status()!=22 && last->status()!=52)) ||
+       ((last->pdgId() >= electron && last->pdgId() <= tau_neutrino) && (last->status() != 1 || last->status() != 2)) ||
+       ((last->pdgId() >= down && last->pdgId() <= charm) && last->status() != 71)) {
+        edm::LogInfo("TreeMaker") << "WARNING The last particle in the chain (" << last->pdgId() << ") does not have a status that corresponds to its type (status=" << last->status() << ")";
     }
 
     return last;
