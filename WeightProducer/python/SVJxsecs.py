@@ -145,11 +145,15 @@ SVJxsecs = {
     "mZprime-5100" : {
         "CrossSection" : XSValues(XS_13TeV=0.0001523),
     },
-    "BFKKM_modelA_n-2000" : {
-        "CrossSection" : XSValues(XS_13TeV=4.612),
-    },
-    "BFKKM_modelB_n-2000" : {
-        "CrossSection" : XSValues(XS_13TeV=4.612),
-    },
+    "BFKKM_modelA_n-2000" : { "CrossSection" : XSValues(XS_13TeV=4.612), },
+    "BFKKM_modelB_n-2000" : { "CrossSection" : XSValues(XS_13TeV=4.612), },
+    "BFKKM_cmsLike" : { "CrossSection" : XSValues(XS_13TeV=4.612), },
+    "BFKKM_cmsLike_n-2000" : { "CrossSection" : XSValues(XS_13TeV=4.612), },
+    "BFKKM_cmsLike_mChi_n-2000" : { "CrossSection" : XSValues(XS_13TeV=4.612), },
+    "BFKKM_cmsLike_lambdaDark_n-2000" : { "CrossSection" : XSValues(XS_13TeV=4.612), },
+    "BFKKM_cmsLike_NcDark_n-2000" : { "CrossSection" : XSValues(XS_13TeV=4.612), },
+    "BFKKM_cmsLike_piDarkDecay_n-2000" : { "CrossSection" : XSValues(XS_13TeV=4.612), },
+    "BFKKM_cmsLike_mDarkSplit_n-2000" : { "CrossSection" : XSValues(XS_13TeV=4.612), },
+    "BFKKM_cmsLike_allChanges_n-2000" : { "CrossSection" : XSValues(XS_13TeV=4.612), },
 }
 

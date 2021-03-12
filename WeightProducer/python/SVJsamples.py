@@ -73,4 +73,11 @@ SVJsamples = [
     MCSample('SVJ_mZprime-3000_mDark-20_rinv-0p3_alpha-peak_TuneCP2_13TeV_pythia8', 'PU2017_12Apr2018_DMinvis_94X_mc2017_realistic_v14-v1', 'RunIIFall17MiniAODv2', 'Constant', 98216, False),
     MCSample("step4_MINIAOD_SVJ_BFKKM_modelA_13TeV-pythia8_n-2000", "", "", "Constant", 42081),
     MCSample("step4_MINIAOD_SVJ_BFKKM_modelB_13TeV-pythia8_n-2000", "", "", "Constant", 42043),
+    MCSample("step4_MINIAOD_SVJ_BFKKM_cmsLike_13TeV-pythia8_n-2000", "", "", "Constant", 9813),
+    MCSample("step4_MINIAOD_SVJ_BFKKM_cmsLike_mChi_13TeV-pythia8_n-2000", "", "", "Constant", 9840),
+    MCSample("step4_MINIAOD_SVJ_BFKKM_cmsLike_lambdaDark_13TeV-pythia8_n-2000", "", "", "Constant", 9825),
+    MCSample("step4_MINIAOD_SVJ_BFKKM_cmsLike_NcDark_13TeV-pythia8_n-2000", "", "", "Constant", 9831),
+    MCSample("step4_MINIAOD_SVJ_BFKKM_cmsLike_piDarkDecay_13TeV-pythia8_n-2000", "", "", "Constant", 9839),
+    MCSample("step4_MINIAOD_SVJ_BFKKM_cmsLike_mDarkSplit_13TeV-pythia8_n-2000", "", "", "Constant", 9815),
+    MCSample("step4_MINIAOD_SVJ_BFKKM_cmsLike_allChanges_13TeV-pythia8_n-2000", "", "", "Constant", 9826),
 ]
