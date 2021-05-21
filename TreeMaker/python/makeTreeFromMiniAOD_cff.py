@@ -1073,10 +1073,17 @@ def makeTreeFromMiniAOD(self,process):
             JetTag = JetAK8Tag,
             MetTag = METTag,
             GenTag = cms.InputTag("prunedGenParticles"),
-            DarkIDs = cms.vuint32(51,52,53),
-            DarkQuarkID = cms.uint32(4900101),
-            DarkMediatorID = cms.uint32(4900023),
+            GenJetTag = cms.InputTag("slimmedGenJetsAK8"),
+            coneSize = cms.double(0.8),
+            DarkStableIDs = cms.vuint32(51,52,53),
+            DarkQuarkIDs = cms.vuint32(4900101),
+            DarkMediatorIDs = cms.vuint32(4900023),
+            DarkHadronIDs = cms.vuint32(4900111,4900113,4900211,4900213),
+            DarkGluonIDs = cms.vuint32(4900021),
         )
+        if self.tchannel:
+            process.HiddenSector.DarkQuarkIDs = [4900101,4900102]
+            process.HiddenSector.DarkMediatorIDs = [4900001,4900002,4900003,4900004,4900005,4900006]
         self.VarsDouble.extend([
             'HiddenSector:MJJ(MJJ_AK8)',
             'HiddenSector:Mmc(Mmc_AK8)',
@@ -1089,6 +1096,13 @@ def makeTreeFromMiniAOD(self,process):
             self.VectorBool.extend([
                 'HiddenSector:isHV(JetsAK8_isHV)'
             ])
+            if self.tchannel:
+                self.VectorInt.extend([
+                    'HiddenSector:hvCategory(JetsAK8_hvCategory)'
+                ])
+                self.VectorDouble.extend([
+                    'HiddenSector:darkPtFrac(JetsAK8_darkPtFrac)'
+                ])
 
     ## ----------------------------------------------------------------------------------------------
     ## ----------------------------------------------------------------------------------------------
