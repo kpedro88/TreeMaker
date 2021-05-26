@@ -217,6 +217,7 @@ def makeTreeFromMiniAOD(self,process):
     )
     JetAK8TagInf = cms.InputTag('slimmedJetsAK8Inf')
     SubjetTag = cms.InputTag('slimmedJetsAK8PFPuppiSoftDropPacked:SubJets')
+    SubjetName = cms.string("SoftDropPuppi")
     GenJetAK8Tag = cms.InputTag('slimmedGenJetsAK8')
     GenParticlesForJetTag = cms.InputTag("packedGenParticlesForJetsNoNu")
 
@@ -312,6 +313,7 @@ def makeTreeFromMiniAOD(self,process):
 
             JetAK8Tag = cms.InputTag("packedPatJetsAK8PFPuppi94XlikeSoftDrop")
             SubjetTag = cms.InputTag("selectedPatJetsAK8PFPuppi94XlikeSoftDropPacked:SubJets")
+            SubjetName = cms.string("SoftDrop")
 
         if self.tchannel:
             # recluster AK8 jets to remove pT cut
@@ -339,6 +341,7 @@ def makeTreeFromMiniAOD(self,process):
 
             JetAK8Tag = cms.InputTag("packedPatJetsAK8PFPuppiNoCutSoftDrop")
             SubjetTag = cms.InputTag("selectedPatJetsAK8PFPuppiNoCutSoftDropPacked:SubJets")
+            SubjetName = cms.string("SoftDrop")
             GenJetAK8Tag = cms.InputTag("ak8GenJetsNoNu")
 
         # update the corrections for AK8 jets
@@ -356,9 +359,9 @@ def makeTreeFromMiniAOD(self,process):
             printWarning = bool(self.verbose),
         )
         
-        # remove pt cut to avoid default values for some jets
+        # remove (or reduce) pt cut to avoid default values for some jets
         if self.deepAK8:
-            process.pfDeepBoostedJetTagInfosAK8UpdatedJEC.min_jet_pt = cms.double(0)
+            process.pfDeepBoostedJetTagInfosAK8UpdatedJEC.min_jet_pt = cms.double(150 if self.tchannel else 0)
 
         JetAK8Tag = cms.InputTag('updatedPatJetsTransientCorrectedAK8UpdatedJEC')
         
@@ -874,11 +877,10 @@ def makeTreeFromMiniAOD(self,process):
         cms.EDProducer('SubjetUpdater',
             JetTag = JetAK8Tag,
             SubjetTag = SubjetTag,
-            OldName = cms.string("SoftDropPuppi"),
+            OldName = SubjetName,
             NewName = cms.string("SoftDropPuppiUpdated"),
         )
     )
-    TMeras.TM80X.toModify(getattr(process, JetAK8TagSJU.value()), OldName = "SoftDrop")
     JetAK8Tag = JetAK8TagSJU
     
     # apply jet ID and get properties
@@ -901,6 +903,18 @@ def makeTreeFromMiniAOD(self,process):
         subjets = cms.vstring('SoftDrop'),
         SJbDiscriminatorCSV = cms.vstring('SoftDrop', 'pfCombinedInclusiveSecondaryVertexV2BJetTags'),
     )
+    if self.tchannel:
+        process.JetPropertiesAK8.NsubjettinessTau1 = cms.vstring('NjettinessAK8PuppiNoCut:tau1')
+        process.JetPropertiesAK8.NsubjettinessTau2 = cms.vstring('NjettinessAK8PuppiNoCut:tau2')
+        process.JetPropertiesAK8.NsubjettinessTau3 = cms.vstring('NjettinessAK8PuppiNoCut:tau3')
+        process.JetPropertiesAK8.ecfN2b1 = cms.vstring('ak8PFJetsPuppiNoCutSoftDropValueMap:nb1AK8PuppiNoCutSoftDropN2')
+        process.JetPropertiesAK8.ecfN2b2 = cms.vstring('ak8PFJetsPuppiNoCutSoftDropValueMap:nb2AK8PuppiNoCutSoftDropN2')
+        process.JetPropertiesAK8.ecfN3b1 = cms.vstring('ak8PFJetsPuppiNoCutSoftDropValueMap:nb1AK8PuppiNoCutSoftDropN3')
+        process.JetPropertiesAK8.ecfN3b2 = cms.vstring('ak8PFJetsPuppiNoCutSoftDropValueMap:nb2AK8PuppiNoCutSoftDropN3')
+        process.JetPropertiesAK8.prunedMass = cms.vstring('ak8PFJetsPuppiNoCutPrunedMass')
+        process.JetPropertiesAK8.softDropMass = cms.vstring('SoftDrop')
+        process.JetPropertiesAK8.subjets = cms.vstring('SoftDrop')
+        process.JetPropertiesAK8.SJbDiscriminatorCSV = cms.vstring('SoftDrop', 'pfCombinedInclusiveSecondaryVertexV2BJetTags')
     if self.systematics:
         process.JetPropertiesAK8.properties.extend(["jecUnc"])
         process.JetPropertiesAK8.jecUnc = cms.vstring(JetAK8TagJECTmp.value())
@@ -984,7 +998,7 @@ def makeTreeFromMiniAOD(self,process):
             PrunedGenJetTag = cms.InputTag("ak8GenJetsPruned"),
             SoftDropGenJetTag = cms.InputTag("ak8GenJetsSoftDrop"),
             distMax = cms.double(0.8),
-            jetPtFilter = cms.double(150),
+            jetPtFilter = cms.double(0. if self.tchannel else 150),
         )
         self.VectorDouble.extend([
             'ak8GenJetProperties:prunedMass(GenJetsAK8_prunedMass)',
