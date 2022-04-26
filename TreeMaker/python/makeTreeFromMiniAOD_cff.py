@@ -321,7 +321,14 @@ def makeTreeFromMiniAOD(self,process):
             ak8updates.extend(['pfMassIndependentDeepDoubleBvLJetTags:probHbb'])
 
         if self.tchannel:
-            # recluster AK8 jets to remove pT cut
+            # remove already-clustered candidates
+            process.lowPtCandidates = cms.EDProducer("PackedCandPtrProjector",
+                src = cms.InputTag("packedPFCandidates"),
+                veto = JetAK8Tag,
+                putEmpty = cms.bool(False),
+            )
+
+            # recluster to get low-pt AK8 jets
             # this also produces a reclustered AK8 GenJet collection w/ no pT cut
             from JMEAnalysis.JetToolbox.jetToolbox_cff import jetToolbox
             jetToolbox(process,
@@ -332,7 +339,9 @@ def makeTreeFromMiniAOD(self,process):
                 useExistingWeights=True,
                 dataTier='miniAOD',
                 runOnMC = self.geninfo,
-                postFix = 'NoCut',
+                postFix = 'LowPt',
+                newPFCollection = True,
+                nameNewPFCollection = 'lowPtCandidates',
                 addPruning = True,
                 addSoftDropSubjets = True,
                 addNsub = True,
@@ -346,9 +355,26 @@ def makeTreeFromMiniAOD(self,process):
                 verbosity = 2 if self.verbose else 0,
             )
 
-            JetAK8Tag = cms.InputTag("packedPatJetsAK8PFPuppiNoCutSoftDrop")
-            SubjetTag = cms.InputTag("selectedPatJetsAK8PFPuppiNoCutSoftDropPacked:SubJets")
-            SubjetName = cms.string("SoftDrop")
+            # fix userfloat names etc.
+            from TreeMaker.Utils.JetRenamer_cfi import JetRenamer
+            process.JetAK8LowPtRenamed = JetRenamer.clone(
+                JetTag = cms.InputTag("packedPatJetsAK8PFPuppiLowPtSoftDrop"),
+                userFloatOld = cms.vstring('NjettinessAK8PuppiLowPt:tau1', 'NjettinessAK8PuppiLowPt:tau2', 'NjettinessAK8PuppiLowPt:tau3', 'ak8PFJetsPuppiLowPtSoftDropValueMap:nb1AK8PuppiLowPtSoftDropN2', 'ak8PFJetsPuppiLowPtSoftDropValueMap:nb2AK8PuppiLowPtSoftDropN2', 'ak8PFJetsPuppiLowPtSoftDropValueMap:nb1AK8PuppiLowPtSoftDropN3', 'ak8PFJetsPuppiLowPtSoftDropValueMap:nb2AK8PuppiLowPtSoftDropN3'),
+                userFloatNew = cms.vstring('NjettinessAK8Puppi:tau1', 'NjettinessAK8Puppi:tau2', 'NjettinessAK8Puppi:tau3', 'ak8PFJetsPuppiSoftDropValueMap:nb1AK8PuppiSoftDropN2', 'ak8PFJetsPuppiSoftDropValueMap:nb2AK8PuppiSoftDropN2', 'ak8PFJetsPuppiSoftDropValueMap:nb1AK8PuppiSoftDropN3', 'ak8PFJetsPuppiSoftDropValueMap:nb2AK8PuppiSoftDropN3'),
+				subjetOld = cms.vstring("SoftDrop"),
+				subjetNew = cms.vstring("SoftDropPuppi"),
+            )
+
+            # merge low-pt and high-pt collections
+            process.JetAK8NoCut = cms.EDProducer("PatJetMerger",
+                src = cms.VInputTag(JetAK8Tag,"JetAK8LowPtRenamed")
+            )
+            process.SubJetAK8NoCut = cms.EDProducer("PatJetMerger",
+                src = cms.VInputTag(SubjetTag,"selectedPatJetsAK8PFPuppiLowPtSoftDropPacked:SubJets")
+            )
+
+            JetAK8Tag = cms.InputTag("JetAK8NoCut")
+            SubjetTag = cms.InputTag("SubJetAK8NoCut")
             GenJetAK8Tag = cms.InputTag("ak8GenJetsNoNu")
 
         # update the corrections for AK8 jets
@@ -854,18 +880,6 @@ def makeTreeFromMiniAOD(self,process):
         suff='AK8',
         storeProperties=2,
     )
-    if self.tchannel:
-        process.JetPropertiesAK8.NsubjettinessTau1 = cms.vstring('NjettinessAK8PuppiNoCut:tau1')
-        process.JetPropertiesAK8.NsubjettinessTau2 = cms.vstring('NjettinessAK8PuppiNoCut:tau2')
-        process.JetPropertiesAK8.NsubjettinessTau3 = cms.vstring('NjettinessAK8PuppiNoCut:tau3')
-        process.JetPropertiesAK8.ecfN2b1 = cms.vstring('ak8PFJetsPuppiNoCutSoftDropValueMap:nb1AK8PuppiNoCutSoftDropN2')
-        process.JetPropertiesAK8.ecfN2b2 = cms.vstring('ak8PFJetsPuppiNoCutSoftDropValueMap:nb2AK8PuppiNoCutSoftDropN2')
-        process.JetPropertiesAK8.ecfN3b1 = cms.vstring('ak8PFJetsPuppiNoCutSoftDropValueMap:nb1AK8PuppiNoCutSoftDropN3')
-        process.JetPropertiesAK8.ecfN3b2 = cms.vstring('ak8PFJetsPuppiNoCutSoftDropValueMap:nb2AK8PuppiNoCutSoftDropN3')
-        process.JetPropertiesAK8.prunedMass = cms.vstring('ak8PFJetsPuppiNoCutPrunedMass')
-        process.JetPropertiesAK8.softDropMass = cms.vstring('SoftDrop')
-        process.JetPropertiesAK8.subjets = cms.vstring('SoftDrop')
-        process.JetPropertiesAK8.SJbDiscriminatorCSV = cms.vstring('SoftDrop', 'pfCombinedInclusiveSecondaryVertexV2BJetTags')
     if self.systematics:
         process.JetPropertiesAK8.properties.extend(["jecUnc"])
         process.JetPropertiesAK8.jecUnc = cms.vstring(JetAK8TagJECTmp.value())

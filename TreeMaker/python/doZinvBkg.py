@@ -75,7 +75,6 @@ def reclusterZinv(self, process, cleanedCandidates, suff):
     )
 
     # update some userfloat names
-    process.JetPropertiesAK8Clean.prunedMass = cms.vstring('ak8PFJetsPuppiCleanPrunedMass')
     process.JetPropertiesAK8Clean.softDropMass = cms.vstring('SoftDrop')
     process.JetPropertiesAK8Clean.NsubjettinessTau1 = cms.vstring('NjettinessAK8PuppiClean:tau1')
     process.JetPropertiesAK8Clean.NsubjettinessTau2 = cms.vstring('NjettinessAK8PuppiClean:tau2')
