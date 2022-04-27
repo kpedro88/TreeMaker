@@ -22,6 +22,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <array>
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -60,6 +61,18 @@ private:
 	enum VarOptions {neutralEmEnergyFraction,neutralHadronEnergyFraction,neutralMultiplicity,chargedEmEnergyFraction,
 					 chargedHadronEnergyFraction,chargedMultiplicity,nconstituents,muonEnergyFraction}; 
 
+	double nef(const EnergyFractionCalculator& efc, const pat::Jet& iJet) const { return efc.neutralEmEnergyFraction(); }
+	double nhf(const EnergyFractionCalculator& efc, const pat::Jet& iJet) const { return efc.neutralHadronEnergyFraction(); }
+	double nm(const EnergyFractionCalculator& efc, const pat::Jet& iJet) const { return puppi_ ? iJet.userFloat(puppiPrefix_+":neutralPuppiMultiplicity") : iJet.neutralMultiplicity(); }
+	double cef(const EnergyFractionCalculator& efc, const pat::Jet& iJet) const { return efc.chargedEmEnergyFraction(); }
+	double chf(const EnergyFractionCalculator& efc, const pat::Jet& iJet) const { return efc.chargedHadronEnergyFraction(); }
+	double cm(const EnergyFractionCalculator& efc, const pat::Jet& iJet) const { return iJet.chargedMultiplicity(); }
+	double nc(const EnergyFractionCalculator& efc, const pat::Jet& iJet) const { return (puppi_ ? iJet.userFloat(puppiPrefix_+":neutralPuppiMultiplicity") : iJet.neutralMultiplicity()) + iJet.chargedMultiplicity(); }
+	double mf(const EnergyFractionCalculator& efc, const pat::Jet& iJet) const { return efc.muonEnergyFraction(); }
+
+	//to store member function pointers more easily
+	typedef double (GoodJetsProducer::*VarCalc)(const EnergyFractionCalculator& efc, const pat::Jet& iJet) const;
+
 	// ----------member data ---------------------------
 	edm::InputTag JetTag_;
 	std::vector<edm::InputTag> SkipTag_;
@@ -68,6 +81,7 @@ private:
 	double maxEta_;
 	std::vector<std::string> varnames_;
 	std::vector<VarOptions> vartypes_;
+	static const std::array<GoodJetsProducer::VarCalc, muonEnergyFraction+1> varcalcs_;
 	std::vector<double> etamin_, etamax_, cutvalmin_, cutvalmax_;
 	double jetPtFilter_;
 	bool saveAllId_, saveAllPt_, ExcludeLeptonIsoTrackPhotons_, TagMode_, invertJetPtFilter_;
@@ -75,6 +89,8 @@ private:
 	bool puppi_;
 	std::string puppiPrefix_;
 };
+
+const std::array<GoodJetsProducer::VarCalc, GoodJetsProducer::muonEnergyFraction+1> GoodJetsProducer::varcalcs_ = {{&GoodJetsProducer::nef, &GoodJetsProducer::nhf, &GoodJetsProducer::nm, &GoodJetsProducer::cef, &GoodJetsProducer::chf, &GoodJetsProducer::cm, &GoodJetsProducer::nc, &GoodJetsProducer::mf}};
 
 //
 // constructors and destructor
@@ -207,18 +223,7 @@ GoodJetsProducer::filter(edm::StreamID, edm::Event& iEvent, const edm::EventSetu
 			double varval = 0.0;
 			EnergyFractionCalculator efc(iJet);
 			for(unsigned v=0; v<vartypes_.size(); ++v) {
-				if(vartypes_[v]==neutralHadronEnergyFraction)		varval = efc.neutralHadronEnergyFraction(); //gives raw energy in the denominator
-				else if(vartypes_[v]==neutralEmEnergyFraction)		varval = efc.neutralEmEnergyFraction(); //gives raw energy in the denominator
-				else if(vartypes_[v]==neutralMultiplicity)			varval = puppi_ ? iJet.userFloat(puppiPrefix_+":neutralPuppiMultiplicity") : iJet.neutralMultiplicity();
-				else if(vartypes_[v]==chargedHadronEnergyFraction)	varval = efc.chargedHadronEnergyFraction();
-				else if(vartypes_[v]==chargedEmEnergyFraction)		varval = efc.chargedEmEnergyFraction();
-				else if(vartypes_[v]==chargedMultiplicity)			varval = iJet.chargedMultiplicity();
-				else if(vartypes_[v]==nconstituents)				varval = (puppi_ ? iJet.userFloat(puppiPrefix_+":neutralPuppiMultiplicity") : iJet.neutralMultiplicity()) + iJet.chargedMultiplicity();
-				else if(vartypes_[v]==muonEnergyFraction)			varval = efc.muonEnergyFraction();
-				else {
-					edm::LogError("TreeMaker") << "ERROR: GoodJetsProducer: unkown variable name " << v << ". Unable to select the correct value for the jet pproperty.";
-					varval = 0.0;
-				}
+				varval = (this->*varcalcs_[vartypes_[v]])(efc, iJet);
 				// 1. Check for a specified eta region. Because abs(eta)>=0 we use -1.0 to turn of the checking of a boundary.
 				// 2. Check to see if the variable is outside the acceptable bounds.
 				// Note: There is a natural way to turn off the lower bound because all fractions and multiplicities are positive definite (i.e. make the lower bound -1.0).
