@@ -29,7 +29,7 @@ def reclusterZinv(self, process, cleanedCandidates, suff):
         newPFCollection = True,
         nameNewPFCollection = cleanedCandidates.value(),
         Cut = 'pt>170.',
-        addPruning = True,
+        addPruning = False,
         addSoftDropSubjets = True,
         addNsub = True,
         maxTau = 3,
@@ -42,6 +42,14 @@ def reclusterZinv(self, process, cleanedCandidates, suff):
         verbosity = 2 if self.verbose else 0,
     )
     JetAK8CleanTag = cms.InputTag("packedPatJetsAK8PFPuppiCleanSoftDrop")
+
+    process.ak8GenJetsNoNu.savePseudoJets = cms.bool(True)
+    process.ak8GenJetsNoNuSoftDrop.usePseudoJets = cms.bool(True)
+    process.ak8GenJetsNoNuSoftDrop.srcPseudoJets = cms.InputTag("ak8GenJetsNoNu")
+
+    process.ak8PFJetsPuppiClean.savePseudoJets = cms.bool(True)
+    process.ak8PFJetsPuppiCleanSoftDrop.usePseudoJets = cms.bool(True)
+    process.ak8PFJetsPuppiCleanSoftDrop.srcPseudoJets = cms.InputTag("ak8PFJetsPuppiClean")
 
     if doJERsmearing:
         # do central smearing and replace jet tag
