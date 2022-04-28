@@ -346,6 +346,14 @@ def makeTreeFromMiniAOD(self,process):
                 verbosity = 2 if self.verbose else 0,
             )
 
+            # todo: put this into jet toolbox
+            process.ak8GenJetsNoNu.savePseudoJets = cms.bool(True)
+            process.ak8GenJetsNoNuSoftDrop.usePseudoJets = cms.bool(True)
+            process.ak8GenJetsNoNuSoftDrop.srcPseudoJets = cms.InputTag("ak8GenJetsNoNu")
+            process.ak8PFJetsPuppiNoCut.savePseudoJets = cms.bool(True)
+            process.ak8PFJetsPuppiNoCutSoftDrop.usePseudoJets = cms.bool(True)
+            process.ak8PFJetsPuppiNoCutSoftDrop.srcPseudoJets = cms.InputTag("ak8PFJetsPuppiNoCut")
+
             JetAK8Tag = cms.InputTag("packedPatJetsAK8PFPuppiNoCutSoftDrop")
             SubjetTag = cms.InputTag("selectedPatJetsAK8PFPuppiNoCutSoftDropPacked:SubJets")
             SubjetName = cms.string("SoftDrop")
@@ -1211,6 +1219,14 @@ def makeTreeFromMiniAOD(self,process):
             JETCorrLevels = levels,
             subJETCorrLevels = levels,
         )
+
+        # todo: put this into jet toolbox
+        process.ak15GenJetsNoNu.savePseudoJets = cms.bool(True)
+        process.ak15GenJetsNoNuSoftDrop.usePseudoJets = cms.bool(True)
+        process.ak15GenJetsNoNuSoftDrop.srcPseudoJets = cms.InputTag("ak15GenJetsNoNu")
+        process.ak15PFJetsPuppi.savePseudoJets = cms.bool(True)
+        process.ak15PFJetsPuppiSoftDrop.usePseudoJets = cms.bool(True)
+        process.ak15PFJetsPuppiSoftDrop.srcPseudoJets = cms.InputTag("ak15PFJetsPuppi")
 
         JetAK15Tag = cms.InputTag("packedPatJetsAK15PFPuppiSoftDrop")
         subJetAK15Tag = cms.InputTag("selectedPatJetsAK15PFPuppiSoftDropPacked:SubJets")
