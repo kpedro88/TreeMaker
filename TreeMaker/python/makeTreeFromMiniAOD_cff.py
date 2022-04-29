@@ -355,6 +355,7 @@ def makeTreeFromMiniAOD(self,process):
             process.ak8PFJetsPuppiNoCut.savePseudoJets = cms.bool(True)
             process.ak8PFJetsPuppiNoCutSoftDrop.usePseudoJets = cms.bool(True)
             process.ak8PFJetsPuppiNoCutSoftDrop.srcPseudoJets = cms.InputTag("ak8PFJetsPuppiNoCut")
+            process.ak8PFJetsPuppiNoCutSoftDrop.jetPtMin = cms.double(5.0) # to match ak8PFJetsPuppiNoCut
 
             JetAK8Tag = cms.InputTag("packedPatJetsAK8PFPuppiNoCutSoftDrop")
             SubjetTag = cms.InputTag("selectedPatJetsAK8PFPuppiNoCutSoftDropPacked:SubJets")
