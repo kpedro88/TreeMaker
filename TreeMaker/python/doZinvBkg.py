@@ -43,10 +43,12 @@ def reclusterZinv(self, process, cleanedCandidates, suff):
     )
     JetAK8CleanTag = cms.InputTag("packedPatJetsAK8PFPuppiCleanSoftDrop")
 
+    process.ak8GenJetsNoNu.useExplicitGhosts = cms.bool(True)
     process.ak8GenJetsNoNu.savePseudoJets = cms.bool(True)
     process.ak8GenJetsNoNuSoftDrop.usePseudoJets = cms.bool(True)
     process.ak8GenJetsNoNuSoftDrop.srcPseudoJets = cms.InputTag("ak8GenJetsNoNu")
 
+    process.ak8PFJetsPuppiClean.useExplicitGhosts = cms.bool(True)
     process.ak8PFJetsPuppiClean.savePseudoJets = cms.bool(True)
     process.ak8PFJetsPuppiCleanSoftDrop.usePseudoJets = cms.bool(True)
     process.ak8PFJetsPuppiCleanSoftDrop.srcPseudoJets = cms.InputTag("ak8PFJetsPuppiClean")
