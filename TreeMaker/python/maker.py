@@ -26,6 +26,7 @@ class maker:
         self.getParamDefault("dataset",[])
         self.getParamDefault("nstart",0)
         self.getParamDefault("nfiles",-1)
+        self.getParamDefault("local","")
         self.getParamDefault("numevents",-1)
         self.getParamDefault("outfile","test_run")
         # get base sample name, assuming format is name or name_#
@@ -43,17 +44,17 @@ class maker:
         self.getParamDefault("doZinv", False, bool)
 
         # special signal stuff
-        self.getParamDefault("systematics",True, bool);
-        self.getParamDefault("semivisible",True, bool);
-        self.getParamDefault("boostedsemivisible",False, bool);
-        self.getParamDefault("emerging",False, bool);
-        self.getParamDefault("doPhotons",True, bool);
-        self.getParamDefault("tchannel",False, bool);
-        self.getParamDefault("deepAK8",True, bool);
-        self.getParamDefault("deepDoubleB",True, bool);
+        self.getParamDefault("systematics",True, bool)
+        self.getParamDefault("semivisible",True, bool)
+        self.getParamDefault("boostedsemivisible",False, bool)
+        self.getParamDefault("emerging",False, bool)
+        self.getParamDefault("doPhotons",True, bool)
+        self.getParamDefault("tchannel",False, bool)
+        self.getParamDefault("deepAK8",True, bool)
+        self.getParamDefault("deepDoubleB",True, bool)
 
         # compute the PDF weights
-        self.getParamDefault("doPDFs", True, bool);
+        self.getParamDefault("doPDFs", True, bool)
 
         # other options off by default
         self.getParamDefault("debugtracks", False, bool)
@@ -106,6 +107,15 @@ class maker:
 
         if self.dataset!=[] :
             self.readFiles.extend( [self.dataset] )
+
+        if len(self.local)>0:
+            for iFile,readFile in enumerate(self.readFiles):
+                if readFile.startswith("/"):
+                    readFileLocal = readFile.replace('/','_')[1:]
+                    xrdcp_command = "{} {}{} {}".format(self.local, self.redir, readFile, readFileLocal)
+                    proc = subprocess.Popen(xrdcp_command.split()) #, shell = False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                    outs, errs = proc.communicate()
+                    self.readFiles[iFile] = "file:{}".format(readFileLocal)
 
         self.readFiles = [(self.redir if val.startswith("/") else "")+val for val in self.readFiles]
 
