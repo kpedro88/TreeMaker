@@ -33,6 +33,6 @@ for f,val in enumerate(process.source.fileNames):
     if process.source.fileNames[f][0:6]=="/store":
         process.source.fileNames[f] = redir+process.source.fileNames[f]
 
-process.xsec = cms.EDAnalyzer("GenXSecAnalyzer")
+process.xsec = cms.EDAnalyzer("GenXSecAnalyzerMultiRun")
 
 process.p = cms.Path(process.xsec)
