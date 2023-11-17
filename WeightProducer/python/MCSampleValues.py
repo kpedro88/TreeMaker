@@ -40,6 +40,7 @@ class MCSampleHelper():
             "step4_MINIAOD_2016_","step4_MINIAOD([v]*[0-9]*)_","step_MINIAOD_",
             "(.mDark)([^_]*)","(.rinv)([^_]*)","(.alpha)([^_]*)",
             "(.ctau)([^_]*)","(.unflavored)([^_]*)","(.kappa)([^_]*)","(.aligned)([^_]*)",
+            "(.temp)([^_]*)","(.decay)([^_]*)",
             "_n([^_]*)","(.isr|.fsr)(up|down)","([_|-]v)([0-9]*)","(.mWCutfix)","([_])(ttHtranche3)","SVJ_","_erdON","_ext([0-9])","_hdamp(UP|DOWN)",
         ],
     }

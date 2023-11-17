@@ -221,6 +221,8 @@ SVJxsecs = {
     "t-channel_mMed-3000" : {
         "CrossSection" : XSValues(XS_13TeV=0.000001462), # uncertainty: 2.812e-08
     },
-
+    "WH-channel_mMed-125" : {
+        "CrossSection" : XSValues(XS_13TeV=1.475),
+    },
 }
 

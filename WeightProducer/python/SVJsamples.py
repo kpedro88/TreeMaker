@@ -73,4 +73,5 @@ SVJsamples = [
     MCSample('SVJ_mZprime-3000_mDark-20_rinv-0p3_alpha-peak_TuneCP2_13TeV_pythia8', 'PU2017_12Apr2018_DMinvis_94X_mc2017_realistic_v14-v1', 'RunIIFall17MiniAODv2', 'Constant', 98216, False),
     MCSample("step_MINIAOD_s-channel_mMed-350_mDark-10_rinv-0.3_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-1000", "signal_production_2016", "", "Constant", 35902),
     MCSample("step_MINIAOD_s-channel_mMed-350_mDark-10_rinv-0.3_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-1000", "signal_production_2016APV", "", "Constant", 36275),
+    MCSample("step_MINIAOD_WH-channel_mMed-125_mDark-2_temp-2_decay-generic_13TeV-pythia8_n-1000", "Samples/WH/2018", "", "Constant", 20000),
 ]
