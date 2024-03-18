@@ -100,7 +100,7 @@ bool HiddenSectorProducer::isAncestor(const PidSet& darkList, CandPtr part) cons
 }
 
 CandPtr HiddenSectorProducer::getAncestor(const PidSet& darkList, CandPtr part) const {
-  if(isParticle(darkList, part)) return part;
+  if(part==nullptr or isParticle(darkList, part)) return part;
   for(size_t i=0;i< part->numberOfMothers();i++)
   {
     auto tmp = getAncestor(darkList,part->mother(i));
