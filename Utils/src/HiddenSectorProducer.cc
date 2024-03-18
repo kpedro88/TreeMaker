@@ -1,4 +1,5 @@
 // system include files
+#include <map>
 #include <memory>
 #include <vector>
 #include <cmath>
@@ -54,6 +55,7 @@ class HiddenSectorProducer : public edm::global::EDProducer<> {
     bool isParticle(const PidSet& darkList, int pid) const;
     bool isParticle(const CandSet& darkList, CandPtr part) const;
     bool isAncestor(const PidSet& darkList, CandPtr part) const;
+    CandPtr getAncestor(const PidSet& darkList, CandPtr part) const;
     void medDecay(CandPtr part, CandSet& firstQdM, CandSet& firstQsM, CandPtr& firstQdM1, CandPtr& firstQdM2, CandPtr& firstQsM1, CandPtr& firstQsM2, bool& secondDM, bool& secondSM) const;
     void firstDark(CandPtr part, CandSet& firstMd, CandSet& firstQd, CandSet& firstGd, CandSet& firstQdM, CandSet& firstQsM, CandPtr& firstQdM1, CandPtr& firstQdM2, CandPtr& firstQsM1, CandPtr& firstQsM2, bool& secondDM, bool& secondSM) const;
     int checkLast(const reco::GenJet& jet, const CandSet& stableDs, int value, double& frac) const;
@@ -94,6 +96,16 @@ bool HiddenSectorProducer::isAncestor(const PidSet& darkList, CandPtr part) cons
     if(isAncestor(darkList,part->mother(i))) return true;
   }
   return false;
+}
+
+CandPtr HiddenSectorProducer::getAncestor(const PidSet& darkList, CandPtr part) const {
+  if(isParticle(darkList, part)) return part;
+  for(size_t i=0;i< part->numberOfMothers();i++)
+  {
+    auto tmp = getAncestor(darkList,part->mother(i));
+    if (tmp!=nullptr) return tmp;
+  }
+  return nullptr;
 }
 
 // this function intends to collect immediate non-mediator daughters of the mediators. These mediator daughters can then be used to reconstruct the mass of the mediator.
@@ -236,6 +248,9 @@ HiddenSectorProducer::HiddenSectorProducer(const edm::ParameterSet& iConfig) :
     produces<std::vector<int>>("hvCategory");
     produces<std::vector<double>>("darkPtFrac");
     produces<std::vector<int>>("MT2JetsID");
+    produces<std::vector<std::vector<LorentzVector>>>("GenJets_darkHadrons");
+    produces<std::vector<std::vector<LorentzVector>>>("GenJets_darkHadronJets");
+    produces<std::vector<std::vector<int>>>("GenJets_darkHadronJets_multiplicity");
   }
 }
 
@@ -277,6 +292,10 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
   auto hvCategory = std::make_unique<std::vector<int>>();
   auto darkPtFrac = std::make_unique<std::vector<double>>();
   auto MT2JetsID = std::make_unique<std::vector<int>>();
+
+  auto GenJets_darkHadrons = std::make_unique<std::vector<std::vector<LorentzVector>>>();
+  auto GenJets_darkHadronJets = std::make_unique<std::vector<std::vector<LorentzVector>>>();
+  auto GenJets_darkHadronJets_multiplicity = std::make_unique<std::vector<std::vector<int>>>();
 
   LorentzVector vpartsSum;
   if(h_parts.isValid()){
@@ -367,6 +386,36 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
       if(matchedAll) GenMT2 = calculateMT2(h_genmets,h_genjets->at(pgenIndex[0]),h_genjets->at(pgenIndex[2]),h_genjets->at(pgenIndex[1]),h_genjets->at(pgenIndex[3]));
       else GenMT2 = 0.;
     }
+
+    //reassemble each dark hadron within GenJet from final state SM particles
+    //sort dark hadrons descending in pt
+    auto comp = [](CandPtr a, CandPtr b){ return a->pt() > b->pt(); };
+    //loop over genjets
+    for(const auto& i_jet : *(h_genjets.product())){
+      std::map<CandPtr,std::vector<CandPtr>,decltype(comp)> darkHadronMap(comp);
+      for(unsigned i = 0; i < i_jet.numberOfDaughters(); ++i){
+        CandPtr dau = daughter_noexcept(i_jet,i);
+        CandPtr darkHadron = getAncestor(DarkHadronIDs_,dau);
+        if (darkHadron!=nullptr){
+          darkHadronMap[darkHadron].push_back(dau);
+        }
+      }
+      std::vector<LorentzVector> tmp_darkHadrons;
+      std::vector<LorentzVector> tmp_darkHadronJets;
+      std::vector<int> tmp_darkHadronJets_multiplicity;
+      for(const auto& entry : darkHadronMap){
+        tmp_darkHadrons.push_back(entry.first->p4());
+        LorentzVector tmpjet;
+        for(const auto& dau : entry.second){
+          tmpjet += dau->p4();
+        }
+        tmp_darkHadronJets.push_back(tmpjet);
+        tmp_darkHadronJets_multiplicity.push_back(entry.second.size());
+      }
+      GenJets_darkHadrons->push_back(tmp_darkHadrons);
+      GenJets_darkHadronJets->push_back(tmp_darkHadronJets);
+      GenJets_darkHadronJets_multiplicity->push_back(tmp_darkHadronJets_multiplicity);
+    }
   }
 
   if(signal_){
@@ -374,6 +423,9 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
     iEvent.put(std::move(hvCategory),"hvCategory");
     iEvent.put(std::move(darkPtFrac),"darkPtFrac");
     iEvent.put(std::move(MT2JetsID),"MT2JetsID");
+    iEvent.put(std::move(GenJets_darkHadrons),"GenJets_darkHadrons");
+    iEvent.put(std::move(GenJets_darkHadronJets),"GenJets_darkHadronJets");
+    iEvent.put(std::move(GenJets_darkHadronJets_multiplicity),"GenJets_darkHadronJets_multiplicity");
   }
   auto pMJJ = std::make_unique<double>(MJJ);
   iEvent.put(std::move(pMJJ),"MJJ");
