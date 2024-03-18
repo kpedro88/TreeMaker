@@ -26,6 +26,7 @@
 #include "DataFormats/Math/interface/LorentzVector.h"
 
 typedef math::XYZTLorentzVector LorentzVector;
+typedef math::PtEtaPhiELorentzVector CLorentzVector;
 
 typedef std::unordered_set<unsigned> PidSet;
 typedef const reco::Candidate* CandPtr;
@@ -248,9 +249,9 @@ HiddenSectorProducer::HiddenSectorProducer(const edm::ParameterSet& iConfig) :
     produces<std::vector<int>>("hvCategory");
     produces<std::vector<double>>("darkPtFrac");
     produces<std::vector<int>>("MT2JetsID");
-    produces<std::vector<std::vector<LorentzVector>>>("GenJets_darkHadrons");
-    produces<std::vector<std::vector<LorentzVector>>>("GenJets_darkHadronJets");
-    produces<std::vector<std::vector<int>>>("GenJets_darkHadronJets_multiplicity");
+    produces<std::vector<std::vector<CLorentzVector>>>("GenJetsDarkHadrons");
+    produces<std::vector<std::vector<CLorentzVector>>>("GenJetsDarkHadronJets");
+    produces<std::vector<std::vector<int>>>("GenJetsDarkHadronJetsMultiplicity");
   }
 }
 
@@ -293,8 +294,8 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
   auto darkPtFrac = std::make_unique<std::vector<double>>();
   auto MT2JetsID = std::make_unique<std::vector<int>>();
 
-  auto GenJets_darkHadrons = std::make_unique<std::vector<std::vector<LorentzVector>>>();
-  auto GenJets_darkHadronJets = std::make_unique<std::vector<std::vector<LorentzVector>>>();
+  auto GenJets_darkHadrons = std::make_unique<std::vector<std::vector<CLorentzVector>>>();
+  auto GenJets_darkHadronJets = std::make_unique<std::vector<std::vector<CLorentzVector>>>();
   auto GenJets_darkHadronJets_multiplicity = std::make_unique<std::vector<std::vector<int>>>();
 
   LorentzVector vpartsSum;
@@ -400,16 +401,16 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
           darkHadronMap[darkHadron].push_back(dau);
         }
       }
-      std::vector<LorentzVector> tmp_darkHadrons;
-      std::vector<LorentzVector> tmp_darkHadronJets;
+      std::vector<CLorentzVector> tmp_darkHadrons;
+      std::vector<CLorentzVector> tmp_darkHadronJets;
       std::vector<int> tmp_darkHadronJets_multiplicity;
       for(const auto& entry : darkHadronMap){
-        tmp_darkHadrons.push_back(entry.first->p4());
+        tmp_darkHadrons.emplace_back(entry.first->pt(),entry.first->eta(),entry.first->phi(),entry.first->energy());
         LorentzVector tmpjet;
         for(const auto& dau : entry.second){
           tmpjet += dau->p4();
         }
-        tmp_darkHadronJets.push_back(tmpjet);
+        tmp_darkHadronJets.emplace_back(tmpjet.pt(),tmpjet.eta(),tmpjet.phi(),tmpjet.energy());
         tmp_darkHadronJets_multiplicity.push_back(entry.second.size());
       }
       GenJets_darkHadrons->push_back(tmp_darkHadrons);
@@ -423,9 +424,9 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
     iEvent.put(std::move(hvCategory),"hvCategory");
     iEvent.put(std::move(darkPtFrac),"darkPtFrac");
     iEvent.put(std::move(MT2JetsID),"MT2JetsID");
-    iEvent.put(std::move(GenJets_darkHadrons),"GenJets_darkHadrons");
-    iEvent.put(std::move(GenJets_darkHadronJets),"GenJets_darkHadronJets");
-    iEvent.put(std::move(GenJets_darkHadronJets_multiplicity),"GenJets_darkHadronJets_multiplicity");
+    iEvent.put(std::move(GenJets_darkHadrons),"GenJetsDarkHadrons");
+    iEvent.put(std::move(GenJets_darkHadronJets),"GenJetsDarkHadronJets");
+    iEvent.put(std::move(GenJets_darkHadronJets_multiplicity),"GenJetsDarkHadronJetsMultiplicity");
   }
   auto pMJJ = std::make_unique<double>(MJJ);
   iEvent.put(std::move(pMJJ),"MJJ");
