@@ -1196,7 +1196,7 @@ def makeTreeFromMiniAOD(self,process):
                 'HiddenSector:GenJetsDarkHadronJets(GenJetsAK8_darkHadronJets)',
             ])
             self.VectorVectorInt.extend([
-                'HiddenSector:GenJetsDarkHadronJetsMultiplicity(GenJetsAK8_darkHadronJets_multiplicity)'
+                'HiddenSector:GenJetsDarkHadronJetsMultiplicity(GenJetsAK8_darkHadronJetsMultiplicity)'
             ])
     ## ----------------------------------------------------------------------------------------------
     ## Photon information
