@@ -263,6 +263,7 @@ def makeJetVars(self, process, JetTag, suff, storeProperties, SkipTag=cms.VInput
                 'JetProperties'+suff+':photonMultiplicity(Jets'+suff+'_photonMultiplicity)',
                 'JetProperties'+suff+':chargedMultiplicity(Jets'+suff+'_chargedMultiplicity)',
                 'JetProperties'+suff+':neutralMultiplicity(Jets'+suff+'_neutralMultiplicity)',
+                'JetProperties'+suff+':nConstituents(Jets'+suff+'_nConstituents)',
             ])
 
             if self.doQG:
@@ -492,6 +493,8 @@ def makeJetVarsAK8(self, process, JetTag, suff, storeProperties, SkipTag=cms.VIn
                 'muonMultiplicity',
                 'chargedMultiplicity',
                 'neutralPuppiMultiplicity',
+                'nConstituents',
+                'nConstituentsSoftDrop',
                 'chargedHadronEnergyFraction',
                 'neutralHadronEnergyFraction',
                 'chargedEmEnergyFraction',
@@ -505,6 +508,7 @@ def makeJetVarsAK8(self, process, JetTag, suff, storeProperties, SkipTag=cms.VIn
             JetPropertiesAK8.neutralHadronPuppiMultiplicity = cms.vstring(puppiSpecific+":neutralHadronPuppiMultiplicity")
             JetPropertiesAK8.neutralPuppiMultiplicity = cms.vstring(puppiSpecific+":neutralPuppiMultiplicity")
             JetPropertiesAK8.photonPuppiMultiplicity = cms.vstring(puppiSpecific+":photonPuppiMultiplicity")
+            JetPropertiesAK8.nConstituentsSoftDrop = cms.vstring(subjetTag) # computed from subjets
             self.VectorDouble.extend([
                 'JetProperties'+suff+':muonEnergyFraction(Jets'+suff+'_muonEnergyFraction)',
                 'JetProperties'+suff+':chargedHadronEnergyFraction(Jets'+suff+'_chargedHadronEnergyFraction)',
@@ -524,6 +528,8 @@ def makeJetVarsAK8(self, process, JetTag, suff, storeProperties, SkipTag=cms.VIn
                 'JetProperties'+suff+':electronMultiplicity(Jets'+suff+'_electronMultiplicity)',
                 'JetProperties'+suff+':muonMultiplicity(Jets'+suff+'_muonMultiplicity)',
                 'JetProperties'+suff+':chargedMultiplicity(Jets'+suff+'_chargedMultiplicity)',
+                'JetProperties'+suff+':nConstituents(Jets'+suff+'_nConstituents)',
+                'JetProperties'+suff+':nConstituentsSoftDrop(Jets'+suff+'_nConstituentsSoftDrop)',
             ])
 
             # extra stuff for subjets

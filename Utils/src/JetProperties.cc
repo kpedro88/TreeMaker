@@ -399,6 +399,27 @@ class NamedPtr_NumChadrons : public NamedPtr<int> {
 };
 DEFINE_NAMED_PTR(NumChadrons);
 
+class NamedPtr_nConstituents : public NamedPtr<int> {
+	public:
+		using NamedPtr<int>::NamedPtr;
+		void get_property(const pat::Jet& Jet) override { push_back(Jet.numberOfDaughters()); }
+};
+DEFINE_NAMED_PTR(nConstituents);
+
+class NamedPtr_nConstituentsSoftDrop : public NamedPtr<int> {
+	public:
+		using NamedPtr<int>::NamedPtr;
+		void get_property(const pat::Jet& Jet) override {
+			int nconst = 0;
+			auto const & subjets = Jet.subjets(extraInfo.at(0));
+			for ( auto const & it : subjets ) {
+				nconst += it->numberOfDaughters();
+			}
+			push_back(nconst);
+		}
+};
+DEFINE_NAMED_PTR(nConstituentsSoftDrop);
+
 //----------------------------------------------------------------------------------------------------------------------------------------
 //math::PtEtaPhiELorentzVectors
 
