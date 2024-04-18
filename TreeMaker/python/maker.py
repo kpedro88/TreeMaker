@@ -54,7 +54,7 @@ class maker:
         self.getParamDefault("deepDoubleB",True, bool);
         self.getParamDefault("doQG",True);
         self.getParamDefault("addPileupId",True, bool);
-        self.getParamDefault("ecfFull",False, bool);
+        self.getParamDefault("ecfFull",True, bool);
 
         # compute the PDF weights
         self.getParamDefault("doPDFs", True, bool);
