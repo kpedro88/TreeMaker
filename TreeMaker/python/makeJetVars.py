@@ -607,10 +607,14 @@ def updateECFs(self, process, ecfs, suff, valueMapName, productName):
     JetProp.properties.extend(new_ecfs) # skip already included
     self.VectorDouble.extend(['JetProperties{1}:{0}(Jets{1}_{0})'.format(_ecf,suff) for _ecf in new_ecfs])
     for _ecf in ecfs:
+        _ecfName = _ecf
+        _ecf = _ecfName.replace("Full","")
         _ecfT = _ecf[3:5]
         _ecfB = _ecf[6]
-        setattr(JetProp,
-            _ecf,
-            cms.vstring('{}ValueMap:{}b{}{}{}'.format(valueMapName,_ecfT[0].lower(),_ecfB,productName,_ecfT))
-        )
+        _ecfModPrefix = '{}b{}'.format(_ecfT[0].lower(),_ecfB)
+        if valueMapName is not None:
+            _ecfUserFloat = '{}ValueMap:{}{}{}'.format(valueMapName,_ecfModPrefix,productName,_ecfT)
+        else:
+            _ecfUserFloat = '{}{}:ecf{}'.format(_ecfModPrefix,productName,_ecfT)
+        setattr(JetProp, _ecfName, cms.vstring(_ecfUserFloat))
     return process

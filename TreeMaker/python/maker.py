@@ -54,6 +54,7 @@ class maker:
         self.getParamDefault("deepDoubleB",True, bool);
         self.getParamDefault("doQG",True);
         self.getParamDefault("addPileupId",True, bool);
+        self.getParamDefault("ecfFull",False, bool);
 
         # compute the PDF weights
         self.getParamDefault("doPDFs", True, bool);
@@ -196,6 +197,7 @@ class maker:
         print " storing deepDoubleB variables: "+str(self.deepDoubleB)
         print " storing quark/gluon variables: "+str(self.doQG)
         print " adding PileupJetId for AK4 : "+str(self.addPileupId)
+        print " adding full (non-softdrop) ECFs for reclustered wide jets : "+str(self.ecfFull)
         print " "
         print " storing JEC/JER systematics: "+str(self.systematics)
         print " storing PDF weights: "+str(self.doPDFs)
