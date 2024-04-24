@@ -411,7 +411,6 @@ def makeTreeFromMiniAOD(self,process):
                 addEnergyCorrFunc = True,
                 ecfType = ["N","M","C","D"],
                 ecfBeta = [1.0,2.0],
-                ecfN3 = [0,10000,10000,10000], # corresponds to ecfType
                 addEnergyCorrFuncFull = self.ecfFull,
                 verbosity = 2 if self.verbose else 0,
             )
@@ -948,9 +947,9 @@ def makeTreeFromMiniAOD(self,process):
             'JetPropertiesAK8:NsubjettinessTau5(JetsAK8_NsubjettinessTau5)',
         ])
 
-        # more ECFs
-        ecfList = ["ecfN2b1","ecfN2b2","ecfN3b1","ecfN3b2","ecfC2b1","ecfC2b2","ecfM2b1","ecfM2b2","ecfD2b1","ecfD2b2"]
-        self.updateECFs(process, ecfList, "AK8", "ak8PFJetsPuppiLowCutSoftDrop", "AK8PuppiLowCutSoftDrop")
+        # more ECFs (N3 has dummy values)
+        ecfList = ["ecfN2b1","ecfN2b2","ecfC2b1","ecfC2b2","ecfM2b1","ecfM2b2","ecfD2b1","ecfD2b2"]
+        self.updateECFs(process, ecfList + ["ecfN3b1","ecfN3b2"], "AK8", "ak8PFJetsPuppiLowCutSoftDrop", "AK8PuppiLowCutSoftDrop")
         if self.ecfFull: self.updateECFs(process, [x.replace("ecf","ecfFull") for x in ecfList], "AK8", None, "AK8PuppiLowCut")
 
     if self.systematics:
