@@ -6,7 +6,7 @@ import subprocess
 # import functions to be assigned as class methods
 from TreeMaker.TreeMaker.makeTreeFromMiniAOD_cff import makeTreeFromMiniAOD, transformJetSeq
 from TreeMaker.TreeMaker.JetDepot import JetVariations
-from TreeMaker.TreeMaker.makeJetVars import makeJetVars, makeGoodJets, makeJetVarsAK8, makeMHTVars
+from TreeMaker.TreeMaker.makeJetVars import makeJetVars, makeGoodJets, makeJetVarsAK8, makeMHTVars, updateECFs
 from TreeMaker.TreeMaker.doHadTauBkg import doHadTauBkg, makeJetVarsHadTau
 from TreeMaker.TreeMaker.doPhotons import doPhotonVars
 from TreeMaker.TreeMaker.doLostLeptonBkg import doLostLeptonBkg
@@ -54,6 +54,7 @@ class maker:
         self.getParamDefault("deepDoubleB",True, bool);
         self.getParamDefault("doQG",True);
         self.getParamDefault("addPileupId",True, bool);
+        self.getParamDefault("ecfFull",True, bool);
 
         # compute the PDF weights
         self.getParamDefault("doPDFs", True, bool);
@@ -196,6 +197,7 @@ class maker:
         print " storing deepDoubleB variables: "+str(self.deepDoubleB)
         print " storing quark/gluon variables: "+str(self.doQG)
         print " adding PileupJetId for AK4 : "+str(self.addPileupId)
+        print " adding full (non-softdrop) ECFs for reclustered wide jets : "+str(self.ecfFull)
         print " "
         print " storing JEC/JER systematics: "+str(self.systematics)
         print " storing PDF weights: "+str(self.doPDFs)
@@ -242,6 +244,7 @@ class maker:
     makeJetVars = makeJetVars
     makeJetVarsAK8 = makeJetVarsAK8
     makeMHTVars = makeMHTVars
+    updateECFs = updateECFs
     doHadTauBkg = doHadTauBkg
     makeJetVarsHadTau = makeJetVarsHadTau
     doLostLeptonBkg = doLostLeptonBkg
