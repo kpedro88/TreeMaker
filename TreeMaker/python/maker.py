@@ -133,6 +133,7 @@ class maker:
                     if not os.path.isdir(tmpdir): os.mkdir(tmpdir)
                     readFileLocal = tmpdir+"/"+readFile.replace('/','_')[1:]
                     xrdcp_command = "{} {}{} {}".format(self.local, self.redir, readFile, readFileLocal)
+                    print(xrdcp_command)
                     proc = subprocess.Popen(xrdcp_command.split()) #, shell = False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                     outs, errs = proc.communicate()
                     if proc.returncode!=0:
