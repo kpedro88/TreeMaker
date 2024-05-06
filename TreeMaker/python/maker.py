@@ -133,6 +133,7 @@ class maker:
                     if not os.path.isdir(tmpdir): os.mkdir(tmpdir)
                     readFileLocal = tmpdir+"/"+readFile.replace('/','_')[1:]
                     xrdcp_command = "{} {}{} {}".format(self.local, self.redir, readFile, readFileLocal)
+                    print(xrdcp_command)
                     proc = subprocess.Popen(xrdcp_command.split()) #, shell = False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                     outs, errs = proc.communicate()
                     if proc.returncode!=0:
@@ -144,7 +145,7 @@ class maker:
         # https://htcondor.readthedocs.io/en/latest/man-pages/condor_chirp.html?highlight=set_job_attr_delayed#chirp-commands
         # https://github.com/cms-sw/cmssw/blob/master/FWCore/Services/plugins/CondorStatusUpdater.cc#L377-L410
         chirp_env = "_CONDOR_CHIRP_CONFIG"
-        if chirp_env in os.environ and os.environ[chirp_env]:
+        if chirp_env in os.environ and os.environ[chirp_env] and len(self.readFiles)==1:
             key = "ChirpTreeMakerReadFiles"
             value = "\"" + ",".join(self.readFiles) + "\""
             try:
