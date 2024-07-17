@@ -5,6 +5,7 @@ readFiles = cms.untracked.vstring()
 secFiles = cms.untracked.vstring()
 source = cms.Source ("PoolSource",fileNames = readFiles, secondaryFileNames = secFiles)
 readFiles.extend( [
+       '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-1.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-2.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-3.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-4.root',
@@ -18,6 +19,7 @@ readFiles.extend( [
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-12.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-13.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-14.root',
+       '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-15.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-16.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-17.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-18.root',
@@ -37,6 +39,8 @@ readFiles.extend( [
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-32.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-33.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-34.root',
+       '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-35.root',
+       '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-36.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-37.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-38.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-1_rinv-0_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2000/part-39.root',

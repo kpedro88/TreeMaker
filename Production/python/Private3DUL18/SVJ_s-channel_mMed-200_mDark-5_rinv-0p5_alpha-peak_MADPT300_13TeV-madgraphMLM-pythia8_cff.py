@@ -24,6 +24,7 @@ readFiles.extend( [
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-5_rinv-0.5_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2535/part-17.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-5_rinv-0.5_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2535/part-18.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-5_rinv-0.5_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2535/part-19.root',
+       '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-5_rinv-0.5_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2535/part-20.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-5_rinv-0.5_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2535/part-21.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-5_rinv-0.5_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2535/part-22.root',
        '/store/user/lpcdarkqcd/boosted/signal_production_3Dscan/2018/MINIAOD/step_MINIAOD_s-channel_mMed-200_mDark-5_rinv-0.5_alpha-peak_MADPT300_13TeV-madgraphMLM-pythia8_n-2535/part-23.root',
