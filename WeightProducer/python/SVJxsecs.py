@@ -172,40 +172,40 @@ SVJxsecs = {
     # Full t-channel cross section
     # now recalculated: including matching/merging efficiency but deliberately NOT downstream filters i.e. Z2 symmetry
     # if pair-production only cross sections are restored, find better naming scheme to disambiguate
-    "t-channel_mMed-500" : {
+    "t-channel_mMed-500_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=4.176e+01),
     },
-    "t-channel_mMed-600" : {
+    "t-channel_mMed-600_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=1.965e+01),
     },
-    "t-channel_mMed-700" : {
+    "t-channel_mMed-700_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=1.038e+01),
     },
-    "t-channel_mMed-800" : {
+    "t-channel_mMed-800_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=6.006e+00),
     },
-    "t-channel_mMed-900" : {
+    "t-channel_mMed-900_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=3.717e+00),
     },
-    "t-channel_mMed-1000" : {
+    "t-channel_mMed-1000_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=2.413e+00),
     },
-    "t-channel_mMed-1500" : {
+    "t-channel_mMed-1500_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=4.832e-01),
     },
-    "t-channel_mMed-2000" : {
+    "t-channel_mMed-2000_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=1.634e-01),
     },
-    "t-channel_mMed-2500" : {
+    "t-channel_mMed-2500_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=7.178e-02),
     },
-    "t-channel_mMed-3000" : {
+    "t-channel_mMed-3000_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=3.603e-02),
     },
-    "t-channel_mMed-3500" : {
+    "t-channel_mMed-3500_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=1.999e-02),
     },
-    "t-channel_mMed-4000" : {
+    "t-channel_mMed-4000_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=1.185e-02),
     },
 }
