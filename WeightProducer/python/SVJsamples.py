@@ -74,7 +74,7 @@ SVJsamples = [
     MCSample("step_MINIAOD_t-channel_mMed-600_mDark-20_rinv-0.3_alpha-peak_yukawa-1_13TeV-madgraphMLM-pythia8_n-4000", "signal_production_2Dscans/2016APV", "", "Constant", 36451),
     MCSample("step_MINIAOD_t-channel_mMed-2000_mDark-20_rinv-0.3_alpha-peak_yukawa-1_13TeV-madgraphMLM-pythia8_n-2000", "signal_production_2Dscans/2016APV", "", "Constant", 19486),
     MCSample("step_MINIAOD_t-channel_mMed-500_mDark-20_rinv-0.3_alpha-peak_yukawa-1_13TeV-madgraphMLM-pythia8_n-4000", "signal_production_2Dscans/2016", "", "Constant", 36613),
-    MCSample("step_MINIAOD_t-channel_mMed-600_mDark-20_rinv-0.3_alpha-peak_yukawa-1_13TeV-madgraphMLM-pythia8_n-4000", "signal_production_2Dscans/2016", "", "Constant", 36580),
+    MCSample("step_MINIAOD_t-channel_mMed-600_mDark-20_rinv-0.3_alpha-peak_yukawa-1_13TeV-madgraphMLM-pythia8_n-4000", "signal_production_2Dscans/2016", "", "Constant", 34973),
     MCSample("step_MINIAOD_t-channel_mMed-700_mDark-20_rinv-0.3_alpha-peak_yukawa-1_13TeV-madgraphMLM-pythia8_n-4000", "signal_production_2Dscans/2016", "", "Constant", 36751),
     MCSample("step_MINIAOD_t-channel_mMed-800_mDark-20_rinv-0.3_alpha-peak_yukawa-1_13TeV-madgraphMLM-pythia8_n-2267", "signal_production_2Dscans/2016", "", "Constant", 20756),
     MCSample("step_MINIAOD_t-channel_mMed-900_mDark-20_rinv-0.3_alpha-peak_yukawa-1_13TeV-madgraphMLM-pythia8_n-2267", "signal_production_2Dscans/2016", "", "Constant", 20898),
