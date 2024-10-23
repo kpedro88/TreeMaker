@@ -15,6 +15,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "TreeMaker/Utils/interface/lester_mt2_bisect.h"
 #include "TreeMaker/Utils/interface/matchAB.h"
+#include "TreeMaker/Utils/interface/NjettinessHelper.h"
 // new includes
 #include "DataFormats/JetReco/interface/GenJet.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
@@ -45,6 +46,7 @@ CandPtr daughter_noexcept(const T& mother, unsigned i) {
 class HiddenSectorProducer : public edm::global::EDProducer<> {
   public:
     explicit HiddenSectorProducer(const edm::ParameterSet&);
+    static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
   private:
     void produce(edm::StreamID, edm::Event&, const edm::EventSetup&) const override;
     //helper
@@ -71,9 +73,11 @@ class HiddenSectorProducer : public edm::global::EDProducer<> {
     edm::EDGetTokenT<edm::View<reco::GenJet>> GenJetTok_;
     double coneSize_;
     PidSet DarkSMediatorIDs_, DarkTMediatorIDs_, DarkQuarkIDs_, DarkHadronIDs_, DarkGluonIDs_, DarkStableIDs_, DarkFirstIDs_, SMQuarkIDs_;
+    NjettinessHelper njhelper;
 };
 
-void HiddenSectorProducer::fillSet(PidSet& IDset, const std::string& name, const edm::ParameterSet& iConfig){
+void HiddenSectorProducer::fillSet(PidSet& IDset, const std::string& name, const edm::ParameterSet& iConfig)
+{
   const auto& ids = iConfig.getParameter<std::vector<unsigned>>(name);
   IDset.insert(ids.begin(),ids.end());
 }
@@ -221,7 +225,8 @@ HiddenSectorProducer::HiddenSectorProducer(const edm::ParameterSet& iConfig) :
   GenMetTok_(consumes<edm::View<reco::GenMET>>(GenMetTag_)),
   GenTok_(consumes<edm::View<reco::GenParticle>>(GenTag_)),
   GenJetTok_(consumes<edm::View<reco::GenJet>>(GenJetTag_)),
-  coneSize_(iConfig.getParameter<double>("coneSize"))
+  coneSize_(iConfig.getParameter<double>("coneSize")),
+  njhelper(iConfig)
 {
   fillSet(DarkSMediatorIDs_,"DarkSMediatorIDs",iConfig);
   fillSet(DarkTMediatorIDs_,"DarkTMediatorIDs",iConfig);
@@ -252,6 +257,9 @@ HiddenSectorProducer::HiddenSectorProducer(const edm::ParameterSet& iConfig) :
     produces<std::vector<std::vector<CLorentzVector>>>("GenJetsDarkHadrons");
     produces<std::vector<std::vector<CLorentzVector>>>("GenJetsDarkHadronJets");
     produces<std::vector<std::vector<int>>>("GenJetsDarkHadronJetsMultiplicity");
+    produces<std::vector<std::vector<double>>>("GenJetsDarkHadronJetsTau1");
+    produces<std::vector<std::vector<double>>>("GenJetsDarkHadronJetsTau2");
+    produces<std::vector<std::vector<double>>>("GenJetsDarkHadronJetsTau3");
   }
 }
 
@@ -297,6 +305,9 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
   auto GenJets_darkHadrons = std::make_unique<std::vector<std::vector<CLorentzVector>>>();
   auto GenJets_darkHadronJets = std::make_unique<std::vector<std::vector<CLorentzVector>>>();
   auto GenJets_darkHadronJets_multiplicity = std::make_unique<std::vector<std::vector<int>>>();
+  auto GenJets_darkHadronJets_tau1 = std::make_unique<std::vector<std::vector<double>>>();
+  auto GenJets_darkHadronJets_tau2 = std::make_unique<std::vector<std::vector<double>>>();
+  auto GenJets_darkHadronJets_tau3 = std::make_unique<std::vector<std::vector<double>>>();
 
   LorentzVector vpartsSum;
   if(h_parts.isValid()){
@@ -401,21 +412,34 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
           darkHadronMap[darkHadron].push_back(dau);
         }
       }
+
       std::vector<CLorentzVector> tmp_darkHadrons;
       std::vector<CLorentzVector> tmp_darkHadronJets;
       std::vector<int> tmp_darkHadronJets_multiplicity;
+      std::vector<double> tmp_darkHadronJets_tau1;
+      std::vector<double> tmp_darkHadronJets_tau2;
+      std::vector<double> tmp_darkHadronJets_tau3;
       for(const auto& entry : darkHadronMap){
         tmp_darkHadrons.emplace_back(entry.first->pt(),entry.first->eta(),entry.first->phi(),entry.first->energy());
         LorentzVector tmpjet;
+	std::vector<CLorentzVector> tmpjetconstituents;
         for(const auto& dau : entry.second){
           tmpjet += dau->p4();
+	  tmpjetconstituents.emplace_back(dau->pt(),dau->eta(),dau->phi(),dau->energy());
         }
         tmp_darkHadronJets.emplace_back(tmpjet.pt(),tmpjet.eta(),tmpjet.phi(),tmpjet.energy());
         tmp_darkHadronJets_multiplicity.push_back(entry.second.size());
+	tmp_darkHadronJets_tau1.push_back(njhelper.getTau(1, tmpjetconstituents));
+	tmp_darkHadronJets_tau2.push_back(njhelper.getTau(2, tmpjetconstituents));
+	tmp_darkHadronJets_tau3.push_back(njhelper.getTau(3, tmpjetconstituents));
+	
       }
       GenJets_darkHadrons->push_back(tmp_darkHadrons);
       GenJets_darkHadronJets->push_back(tmp_darkHadronJets);
       GenJets_darkHadronJets_multiplicity->push_back(tmp_darkHadronJets_multiplicity);
+      GenJets_darkHadronJets_tau1->push_back(tmp_darkHadronJets_tau1);
+      GenJets_darkHadronJets_tau2->push_back(tmp_darkHadronJets_tau2);
+      GenJets_darkHadronJets_tau3->push_back(tmp_darkHadronJets_tau3);
     }
   }
 
@@ -427,6 +451,9 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
     iEvent.put(std::move(GenJets_darkHadrons),"GenJetsDarkHadrons");
     iEvent.put(std::move(GenJets_darkHadronJets),"GenJetsDarkHadronJets");
     iEvent.put(std::move(GenJets_darkHadronJets_multiplicity),"GenJetsDarkHadronJetsMultiplicity");
+    iEvent.put(std::move(GenJets_darkHadronJets_tau1),"GenJetsDarkHadronJetsTau1");
+    iEvent.put(std::move(GenJets_darkHadronJets_tau2),"GenJetsDarkHadronJetsTau2");
+    iEvent.put(std::move(GenJets_darkHadronJets_tau3),"GenJetsDarkHadronJetsTau3");
   }
   auto pMJJ = std::make_unique<double>(MJJ);
   iEvent.put(std::move(pMJJ),"MJJ");
@@ -442,6 +469,17 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
   iEvent.put(std::move(pDeltaPhi2),"DeltaPhi2");
   auto pDeltaPhiMin = std::make_unique<double>(DeltaPhiMin);
   iEvent.put(std::move(pDeltaPhiMin),"DeltaPhiMin");
+}
+
+void HiddenSectorProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  edm::ParameterSetDescription desc_nj;
+  desc_nj.add<unsigned>("measureDefinition",0);
+  desc_nj.add<double>("beta",1.0);
+  desc_nj.add<double>("R0",0.8);
+  desc_nj.add<double>("Rcutoff",999.0);
+  desc_nj.add<unsigned>("axesDefinition",6);
+  desc_nj.add<int>("nPass",999);
+  desc_nj.add<double>("akAxesR0",999.0);
 }
 
 DEFINE_FWK_MODULE(HiddenSectorProducer);
