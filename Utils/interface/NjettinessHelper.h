@@ -4,6 +4,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "fastjet/contrib/Njettiness.hh"
 #include "DataFormats/JetReco/interface/GenJet.h"
+#include "DataFormats/Math/interface/LorentzVector.h"
 #include <utility>
 
 //based on RecoJets/JetProducers/interface/NjettinessAdder.h
