@@ -208,256 +208,256 @@ SVJxsecs = {
     "t-channel_mMed-4000_yukawa-1" : {
         "CrossSection" : XSValues(XS_13TeV=1.185e-02),
     },
-    "t-channel_mMed-1000_yukawa-0p1" : {
+    "t-channel_mMed-1000_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=5.283e-02),
     },
-    "t-channel_mMed-1000_yukawa-0p5" : {
+    "t-channel_mMed-1000_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=2.921e-01),
     },
-    "t-channel_mMed-1000_yukawa-1p5" : {
+    "t-channel_mMed-1000_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.058e+01),
     },
     "t-channel_mMed-1000_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=3.199e+01),
     },
-    "t-channel_mMed-1000_yukawa-2p5" : {
+    "t-channel_mMed-1000_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=7.541e+01),
     },
     "t-channel_mMed-1000_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=1.534e+02),
     },
-    "t-channel_mMed-1000_yukawa-3p5" : {
+    "t-channel_mMed-1000_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=2.795e+02),
     },
-    "t-channel_mMed-1500_yukawa-0p1" : {
+    "t-channel_mMed-1500_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=2.174e-03),
     },
-    "t-channel_mMed-1500_yukawa-0p5" : {
+    "t-channel_mMed-1500_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=4.160e-02),
     },
-    "t-channel_mMed-1500_yukawa-1p5" : {
+    "t-channel_mMed-1500_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=2.289e+00),
     },
     "t-channel_mMed-1500_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=7.131e+00),
     },
-    "t-channel_mMed-1500_yukawa-2p5" : {
+    "t-channel_mMed-1500_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.696e+01),
     },
     "t-channel_mMed-1500_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=3.465e+01),
     },
-    "t-channel_mMed-1500_yukawa-3p5" : {
+    "t-channel_mMed-1500_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=6.283e+01),
     },
-    "t-channel_mMed-2000_yukawa-0p1" : {
+    "t-channel_mMed-2000_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=1.935e-04),
     },
-    "t-channel_mMed-2000_yukawa-0p5" : {
+    "t-channel_mMed-2000_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.191e-02),
     },
-    "t-channel_mMed-2000_yukawa-1p5" : {
+    "t-channel_mMed-2000_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=8.036e-01),
     },
     "t-channel_mMed-2000_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=2.531e+00),
     },
-    "t-channel_mMed-2000_yukawa-2p5" : {
+    "t-channel_mMed-2000_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=6.062e+00),
     },
     "t-channel_mMed-2000_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=1.239e+01),
     },
-    "t-channel_mMed-2000_yukawa-3p5" : {
+    "t-channel_mMed-2000_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=2.308e+01),
     },
-    "t-channel_mMed-2500_yukawa-0p1" : {
+    "t-channel_mMed-2500_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=3.228e-05),
     },
-    "t-channel_mMed-2500_yukawa-0p5" : {
+    "t-channel_mMed-2500_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=4.797e-03),
     },
-    "t-channel_mMed-2500_yukawa-1p5" : {
+    "t-channel_mMed-2500_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=3.594e-01),
     },
     "t-channel_mMed-2500_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=1.136e+00),
     },
-    "t-channel_mMed-2500_yukawa-2p5" : {
+    "t-channel_mMed-2500_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=2.714e+00),
     },
     "t-channel_mMed-2500_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=5.563e+00),
     },
-    "t-channel_mMed-2500_yukawa-3p5" : {
+    "t-channel_mMed-2500_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.004e+01),
     },
-    "t-channel_mMed-3000_yukawa-0p1" : {
+    "t-channel_mMed-3000_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=8.502e-06),
     },
-    "t-channel_mMed-3000_yukawa-0p5" : {
+    "t-channel_mMed-3000_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=2.321e-03),
     },
-    "t-channel_mMed-3000_yukawa-1p5" : {
+    "t-channel_mMed-3000_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.807e-01),
     },
     "t-channel_mMed-3000_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=5.721e-01),
     },
-    "t-channel_mMed-3000_yukawa-2p5" : {
+    "t-channel_mMed-3000_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.374e+00),
     },
     "t-channel_mMed-3000_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=2.808e+00),
     },
-    "t-channel_mMed-3000_yukawa-3p5" : {
+    "t-channel_mMed-3000_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=5.097e+00),
     },
-    "t-channel_mMed-3500_yukawa-0p1" : {
+    "t-channel_mMed-3500_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=3.091e-06),
     },
-    "t-channel_mMed-3500_yukawa-0p5" : {
+    "t-channel_mMed-3500_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.264e-03),
     },
-    "t-channel_mMed-3500_yukawa-1p5" : {
+    "t-channel_mMed-3500_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.007e-01),
     },
     "t-channel_mMed-3500_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=3.199e-01),
     },
-    "t-channel_mMed-3500_yukawa-2p5" : {
+    "t-channel_mMed-3500_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=7.664e-01),
     },
     "t-channel_mMed-3500_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=1.564e+00),
     },
-    "t-channel_mMed-3500_yukawa-3p5" : {
+    "t-channel_mMed-3500_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=2.831e+00),
     },
-    "t-channel_mMed-4000_yukawa-0p1" : {
+    "t-channel_mMed-4000_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=1.467e-06),
     },
-    "t-channel_mMed-4000_yukawa-0p5" : {
+    "t-channel_mMed-4000_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=7.517e-04),
     },
-    "t-channel_mMed-4000_yukawa-1p5" : {
+    "t-channel_mMed-4000_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=6.025e-02),
     },
     "t-channel_mMed-4000_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=1.909e-01),
     },
-    "t-channel_mMed-4000_yukawa-2p5" : {
+    "t-channel_mMed-4000_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=4.592e-01),
     },
     "t-channel_mMed-4000_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=9.351e-01),
     },
-    "t-channel_mMed-4000_yukawa-3p5" : {
+    "t-channel_mMed-4000_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.688e+00),
     },
-    "t-channel_mMed-500_yukawa-0p1" : {
+    "t-channel_mMed-500_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=1.864e+05),
     },
-    "t-channel_mMed-500_yukawa-0p5" : {
+    "t-channel_mMed-500_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.007e+01),
     },
-    "t-channel_mMed-500_yukawa-1p5" : {
+    "t-channel_mMed-500_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.515e+02),
     },
     "t-channel_mMed-500_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=4.275e+02),
     },
-    "t-channel_mMed-500_yukawa-2p5" : {
+    "t-channel_mMed-500_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=9.231e+02),
     },
     "t-channel_mMed-500_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=1.851e+03),
     },
-    "t-channel_mMed-500_yukawa-3p5" : {
+    "t-channel_mMed-500_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=3.336e+03),
     },
-    "t-channel_mMed-600_yukawa-0p1" : {
+    "t-channel_mMed-600_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=1.712e+00),
     },
-    "t-channel_mMed-600_yukawa-0p5" : {
+    "t-channel_mMed-600_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=3.930e+00),
     },
-    "t-channel_mMed-600_yukawa-1p5" : {
+    "t-channel_mMed-600_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=7.565e+01),
     },
     "t-channel_mMed-600_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=2.167e+02),
     },
-    "t-channel_mMed-600_yukawa-2p5" : {
+    "t-channel_mMed-600_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=4.881e+02),
     },
     "t-channel_mMed-600_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=9.839e+02),
     },
-    "t-channel_mMed-600_yukawa-3p5" : {
+    "t-channel_mMed-600_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.771e+03),
     },
-    "t-channel_mMed-700_yukawa-0p1" : {
+    "t-channel_mMed-700_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=6.343e-01),
     },
-    "t-channel_mMed-700_yukawa-0p5" : {
+    "t-channel_mMed-700_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.783e+00),
     },
-    "t-channel_mMed-700_yukawa-1p5" : {
+    "t-channel_mMed-700_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=4.180e+01),
     },
     "t-channel_mMed-700_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=1.219e+02),
     },
-    "t-channel_mMed-700_yukawa-2p5" : {
+    "t-channel_mMed-700_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=2.792e+02),
     },
     "t-channel_mMed-700_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=5.669e+02),
     },
-    "t-channel_mMed-700_yukawa-3p5" : {
+    "t-channel_mMed-700_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.025e+03),
     },
-    "t-channel_mMed-800_yukawa-0p1" : {
+    "t-channel_mMed-800_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=2.582e-01),
     },
-    "t-channel_mMed-800_yukawa-0p5" : {
+    "t-channel_mMed-800_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=9.026e-01),
     },
-    "t-channel_mMed-800_yukawa-1p5" : {
+    "t-channel_mMed-800_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=2.503e+01),
     },
     "t-channel_mMed-800_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=7.403e+01),
     },
-    "t-channel_mMed-800_yukawa-2p5" : {
+    "t-channel_mMed-800_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.724e+02),
     },
     "t-channel_mMed-800_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=3.497e+02),
     },
-    "t-channel_mMed-800_yukawa-3p5" : {
+    "t-channel_mMed-800_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=6.343e+02),
     },
-    "t-channel_mMed-900_yukawa-0p1" : {
+    "t-channel_mMed-900_yukawa-0.1" : {
         "CrossSection" : XSValues(XS_13TeV=1.136e-01),
     },
-    "t-channel_mMed-900_yukawa-0p5" : {
+    "t-channel_mMed-900_yukawa-0.5" : {
         "CrossSection" : XSValues(XS_13TeV=4.957e-01),
     },
-    "t-channel_mMed-900_yukawa-1p5" : {
+    "t-channel_mMed-900_yukawa-1.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.592e+01),
     },
     "t-channel_mMed-900_yukawa-2" : {
         "CrossSection" : XSValues(XS_13TeV=4.763e+01),
     },
-    "t-channel_mMed-900_yukawa-2p5" : {
+    "t-channel_mMed-900_yukawa-2.5" : {
         "CrossSection" : XSValues(XS_13TeV=1.116e+02),
     },
     "t-channel_mMed-900_yukawa-3" : {
         "CrossSection" : XSValues(XS_13TeV=2.285e+02),
     },
-    "t-channel_mMed-900_yukawa-3p5" : {
+    "t-channel_mMed-900_yukawa-3.5" : {
         "CrossSection" : XSValues(XS_13TeV=4.149e+02),
     },
 }
