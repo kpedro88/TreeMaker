@@ -43,12 +43,13 @@ CandPtr daughter_noexcept(const T& mother, unsigned i) {
   return tmp.id().isValid() ? &*tmp : nullptr;
 }
 
-class HiddenSectorProducer : public edm::global::EDProducer<> {
+class HiddenSectorProducer : public edm::global::EDProducer<edm::StreamCache<NjettinessHelper>> {
   public:
     explicit HiddenSectorProducer(const edm::ParameterSet&);
     static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+    edm::ParameterSet njhConfig; 
   private:
-    void produce(edm::StreamID, edm::Event&, const edm::EventSetup&) const override;
+    void produce(edm::StreamID iID, edm::Event&, const edm::EventSetup&) const override;
     //helper
     double TransverseMass(double px1, double py1, double m1, double px2, double py2, double m2) const;
     template <class P>
@@ -73,7 +74,10 @@ class HiddenSectorProducer : public edm::global::EDProducer<> {
     edm::EDGetTokenT<edm::View<reco::GenJet>> GenJetTok_;
     double coneSize_;
     PidSet DarkSMediatorIDs_, DarkTMediatorIDs_, DarkQuarkIDs_, DarkHadronIDs_, DarkGluonIDs_, DarkStableIDs_, DarkFirstIDs_, SMQuarkIDs_;
-    NjettinessHelper njhelper;
+    std::unique_ptr<NjettinessHelper> beginStream(edm::StreamID) const {
+      return std::unique_ptr<NjettinessHelper>(new NjettinessHelper(njhConfig));
+    }
+
 };
 
 void HiddenSectorProducer::fillSet(PidSet& IDset, const std::string& name, const edm::ParameterSet& iConfig)
@@ -225,8 +229,7 @@ HiddenSectorProducer::HiddenSectorProducer(const edm::ParameterSet& iConfig) :
   GenMetTok_(consumes<edm::View<reco::GenMET>>(GenMetTag_)),
   GenTok_(consumes<edm::View<reco::GenParticle>>(GenTag_)),
   GenJetTok_(consumes<edm::View<reco::GenJet>>(GenJetTag_)),
-  coneSize_(iConfig.getParameter<double>("coneSize")),
-  njhelper(iConfig)
+  coneSize_(iConfig.getParameter<double>("coneSize"))
 {
   fillSet(DarkSMediatorIDs_,"DarkSMediatorIDs",iConfig);
   fillSet(DarkTMediatorIDs_,"DarkTMediatorIDs",iConfig);
@@ -240,6 +243,8 @@ HiddenSectorProducer::HiddenSectorProducer(const edm::ParameterSet& iConfig) :
   DarkFirstIDs_.insert(DarkQuarkIDs_.begin(),DarkQuarkIDs_.end());
   DarkFirstIDs_.insert(DarkGluonIDs_.begin(),DarkGluonIDs_.end());
   asymm_mt2_lester_bisect::disableCopyrightMessage();
+
+  njhConfig = iConfig;
 
   produces<double>("MJJ");
   produces<double>("Mmc");
@@ -279,7 +284,7 @@ void HiddenSectorProducer::addDaughters(const P* i_part, std::vector<CandPtr>& l
   }
 }
 
-void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm::EventSetup& iSetup) const
+void HiddenSectorProducer::produce(edm::StreamID iID, edm::Event& iEvent, const edm::EventSetup& iSetup) const
 {
   //get the collections
   edm::Handle<edm::View<pat::Jet>> h_jets;
@@ -308,7 +313,7 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
   auto GenJets_darkHadronJets_tau1 = std::make_unique<std::vector<std::vector<double>>>();
   auto GenJets_darkHadronJets_tau2 = std::make_unique<std::vector<std::vector<double>>>();
   auto GenJets_darkHadronJets_tau3 = std::make_unique<std::vector<std::vector<double>>>();
-
+  
   LorentzVector vpartsSum;
   if(h_parts.isValid()){
     for(const auto& i_part : *(h_parts.product())){
@@ -367,11 +372,13 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
     CandSet stableDs, firstMd, firstQd, firstGd, firstQdM, firstQsM;
     CandPtr firstQdM1, firstQdM2, firstQsM1, firstQsM2;
     bool secondDM = false, secondSM = false;
+    
     //loop over gen particles
     for(const auto& i_part : *(h_parts.product())){
       firstDark(&i_part, firstMd, firstQd, firstGd, firstQdM, firstQsM, firstQdM1, firstQdM2, firstQsM1, firstQsM2,secondDM,secondSM);
       if(static_cast<const reco::GenParticle*>(&i_part)->isLastCopy() and isParticle(DarkStableIDs_,&i_part)) stableDs.insert(&i_part);
     }
+
     //loop over gen jets
     for(const auto& i_jet : *(h_genjets.product())){
       int category = 0;
@@ -429,9 +436,9 @@ void HiddenSectorProducer::produce(edm::StreamID, edm::Event& iEvent, const edm:
         }
         tmp_darkHadronJets.emplace_back(tmpjet.pt(),tmpjet.eta(),tmpjet.phi(),tmpjet.energy());
         tmp_darkHadronJets_multiplicity.push_back(entry.second.size());
-	tmp_darkHadronJets_tau1.push_back(njhelper.getTau(1, tmpjetconstituents));
-	tmp_darkHadronJets_tau2.push_back(njhelper.getTau(2, tmpjetconstituents));
-	tmp_darkHadronJets_tau3.push_back(njhelper.getTau(3, tmpjetconstituents));
+	tmp_darkHadronJets_tau1.push_back(streamCache(iID)->getTau(1, tmpjetconstituents));
+	tmp_darkHadronJets_tau2.push_back(streamCache(iID)->getTau(2, tmpjetconstituents));
+	tmp_darkHadronJets_tau3.push_back(streamCache(iID)->getTau(3, tmpjetconstituents));
 	
       }
       GenJets_darkHadrons->push_back(tmp_darkHadrons);
