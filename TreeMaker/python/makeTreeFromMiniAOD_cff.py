@@ -1463,6 +1463,57 @@ def makeTreeFromMiniAOD(self,process):
             )
         )
 
+    if self.geninfo and self.boostedsemivisible and self.gensub:
+        from TreeMaker.TreeMaker.GenJetSubstructure import addGenSub
+
+        # add substructure to AK15 GenJets
+        mod = {}
+        mod["GenJets"] = GenJetAK15Tag.value()
+        mod["GenJetsSoftDrop"] = mod["GenJets"]+"SoftDrop"
+        process = addGenSub(process, size=1.5, prefix="ak15", suffix="NoNu", src=GenParticlesForJetTag.value(), mod=mod)
+        # store
+        process.ak15GenJetProperties = genjetproperties.clone(
+            GenJetTag = "ak15GenJetsPackedNoNu",
+            SoftDropGenJetTag = mod["GenJetsSoftDrop"],
+            distMax = cms.double(1.5),
+            jetPtFilter = cms.double(0),
+            ecfs = cms.vstring('ecfN1b1', 'ecfN1b2', 'ecfN2b1', 'ecfN2b2', 'ecfN3b1', 'ecfN3b2'),
+        )
+        self.VectorFloat.extend([
+            'ak15GenJetProperties:{0}(GenJetsAK15_{0})'.format(ecf) for ecf in process.ak15GenJetProperties.ecfs
+        ])
+
+        # GenJets made from dark hadrons
+        process.darkHadronsForJets = cms.EDProducer("GenParticlePruner",
+            src = cms.InputTag("prunedGenParticles"),
+            select = cms.vstring(
+                'drop *',
+                'keep (abs(pdgId)==4900111 || abs(pdgId)==4900113 || abs(pdgId)==4900211 || abs(pdgId)==4900213) && statusFlags().isLastCopy()',
+            ),
+        )
+        process = addGenSub(process, size=1.5, prefix="ak15", suffix="Dark", src="darkHadronsForJets")
+        DarkJetAK15Tag = cms.InputTag("ak15GenJetsDark")
+        process = self.transformJetSeq(process, DarkJetAK15Tag.value(), {"SoftDrop":"ak15GenJetsSoftDropDark"}, "recoGenJets")
+        # store
+        process.ak15DarkJetProperties = genjetproperties.clone(
+            GenJetTag = "ak15GenJetsPackedDark",
+            SoftDropGenJetTag = "ak15GenJetsSoftDropDark",
+            distMax = cms.double(1.5),
+            jetPtFilter = cms.double(0),
+            ecfs = process.ak15GenJetProperties.ecfs,
+        )
+        self.VectorRecoCand.extend([DarkJetAK15Tag.value()+'(DarkJetsAK15)'])
+        self.VectorFloat.extend([
+            'ak15DarkJetProperties:{0}(DarkJetsAK15_{0})'.format(ecf) for ecf in process.ak15DarkJetProperties.ecfs
+        ])
+        # match
+        jetMatcherDark = cms.EDProducer("RecoGenMatcher",
+            JetTag = JetAK15Tag,
+            GenJetTag = DarkJetAK15Tag,
+        )
+        setattr(process,'jetMatcherDarkAK15',jetMatcherDark)
+        self.VectorInt.extend(['jetMatcherDarkAK15(JetsAK15_darkIndex)'])
+
     ## ----------------------------------------------------------------------------------------------
     ## ----------------------------------------------------------------------------------------------
     ## Final steps

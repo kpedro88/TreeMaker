@@ -7,4 +7,5 @@ genjetproperties = cms.EDProducer('GenJetProperties',
     distMax = cms.double(0.4),
     jetPtFilter = cms.double(0.0),
     doHV = cms.bool(False),
+    ecfs = cms.vstring(),
 )

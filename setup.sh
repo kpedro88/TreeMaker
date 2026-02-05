@@ -162,6 +162,7 @@ fi
 # outside repositories
 git clone ${ACCESS_GITHUB}TreeMaker/JetToolbox.git JMEAnalysis/JetToolbox -b jetToolbox_102X
 git clone ${ACCESS_GITHUB}kpedro88/CondorProduction.git Condor/Production
+git clone ${ACCESS_GITHUB}cms-svj/SVJProduction.git SVJ/Production -b Run2_UL
 git clone ${ACCESS_GITHUB}${FORK}/TreeMaker.git -b ${BRANCH}
 wget https://raw.githubusercontent.com/cms-egamma/EgammaPostRecoTools/f38439658b0784e07c3c64927185919fa6594904/python/EgammaPostRecoTools.py -P TreeMaker/Utils/python/
 

@@ -47,6 +47,7 @@ class maker:
         self.getParamDefault("systematics",True, bool);
         self.getParamDefault("semivisible",True, bool);
         self.getParamDefault("boostedsemivisible",False, bool);
+        self.getParamDefault("gensub",False, bool);
         self.getParamDefault("emerging",False, bool);
         self.getParamDefault("doPhotons",True, bool);
         self.getParamDefault("tchannel",False, bool);
@@ -191,6 +192,7 @@ class maker:
         print " storing Zinv variables: "+str(self.doZinv)
         print " storing semi-visible jet variables: "+str(self.semivisible)
         print " storing also boostedsemivisible variables: "+str(self.boostedsemivisible)
+        print " storing boostedsemivisible genjet substructure: "+str(self.gensub)
         print " storing emerging jet variables: "+str(self.emerging)
         print " storing photon variables: "+str(self.doPhotons)
         print " storing t-channel semi-visible jet variables: "+str(self.tchannel)

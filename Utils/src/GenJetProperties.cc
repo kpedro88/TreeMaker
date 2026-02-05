@@ -20,6 +20,8 @@
 #include "DataFormats/JetReco/interface/GenJet.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/Math/interface/deltaR.h"
+#include "DataFormats/Common/interface/getRef.h"
+#include "DataFormats/Common/interface/ValueMap.h"
 
 //
 // class declaration
@@ -41,6 +43,8 @@ private:
   edm::InputTag SoftDropTag;
   edm::EDGetTokenT<std::vector<reco::BasicJet>> SoftDropTok;
   double distMax, jetPtFilter, doHV;
+  std::vector<std::string> ecfNames;
+  std::vector<edm::EDGetTokenT<edm::ValueMap<float>>> ecfTok;
 
   // ----------member data ---------------------------
 };
@@ -75,11 +79,18 @@ GenJetProperties::GenJetProperties(const edm::ParameterSet& iConfig) :
   SoftDropTag(iConfig.getParameter<edm::InputTag>("SoftDropGenJetTag")),
   distMax(iConfig.getParameter<double>("distMax")),
   jetPtFilter(iConfig.getParameter<double>("jetPtFilter")),
-  doHV(iConfig.getParameter<bool>("doHV"))
+  doHV(iConfig.getParameter<bool>("doHV")),
+  ecfNames(iConfig.getParameter<std::vector<std::string>>("ecfs"))
 {
   // Create the tokens if the InputTags aren't empty strings
   if(!SoftDropTag.label().empty()) {
     SoftDropTok = consumes<std::vector<reco::BasicJet>>(SoftDropTag);
+  }
+
+  for (const auto& ecfName : ecfNames) {
+    edm::InputTag ecfTag(GenJetTag.label(), ecfName);
+    ecfTok.emplace_back(consumes<edm::ValueMap<float>>(ecfTag));
+    produces<std::vector<float>>(ecfName);
   }
 
   //register your products
@@ -136,6 +147,7 @@ GenJetProperties::produce(edm::StreamID, edm::Event& iEvent, const edm::EventSet
   auto softDropMass = std::make_unique<std::vector<double>>();
   auto mult = std::make_unique<std::vector<int>>();
   auto nHVAncestors = std::make_unique<std::vector<int>>();
+  std::vector<std::unique_ptr<std::vector<float>>> ecfOut;
 
   edm::Handle< edm::View<reco::GenJet> > GenJets;
   iEvent.getByToken(GenJetTok,GenJets);
@@ -151,7 +163,15 @@ GenJetProperties::produce(edm::StreamID, edm::Event& iEvent, const edm::EventSet
       doSoftDrop = false;
     }
 
-    for(const auto& GenJet: *GenJets){
+    std::vector<edm::Handle<edm::ValueMap<float>>> ecfHandles;
+    for (const auto& tok : ecfTok) {
+      ecfHandles.emplace_back();
+      iEvent.getByToken(tok, ecfHandles.back());
+      ecfOut.emplace_back(std::make_unique<std::vector<float>>());
+    }
+
+    for(unsigned j = 0; j < GenJets->size(); ++j){
+      const auto& GenJet = (*GenJets)[j];
       if(jetPtFilter>0. and GenJet.pt()<jetPtFilter) continue;
       genJetsOut->push_back(GenJet);
 
@@ -182,6 +202,11 @@ GenJetProperties::produce(edm::StreamID, edm::Event& iEvent, const edm::EventSet
       softDropMass->push_back(softdrop);
       mult->push_back(GenJet.numberOfDaughters());
       nHVAncestors->push_back(hvConstituents);
+
+      auto jRef = edm::getRef(GenJets, j);
+      for(unsigned i = 0; i < ecfHandles.size(); ++i){
+        ecfOut[i]->push_back((*ecfHandles[i])[jRef]);
+      }
     }
   }
 
@@ -190,6 +215,9 @@ GenJetProperties::produce(edm::StreamID, edm::Event& iEvent, const edm::EventSet
   iEvent.put(std::move(softDropMass),"softDropMass");
   iEvent.put(std::move(mult),"multiplicity");
   iEvent.put(std::move(nHVAncestors),"nHVAncestors");
+  for(unsigned i = 0; i < ecfNames.size(); ++i){
+    iEvent.put(std::move(ecfOut[i]), ecfNames[i]);
+  }
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
