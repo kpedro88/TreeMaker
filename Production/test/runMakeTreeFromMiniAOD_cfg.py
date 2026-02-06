@@ -15,6 +15,7 @@ threads=parameters.value("threads",1)
 streams=parameters.value("streams",0)
 tmi=parameters.value("tmi",False)
 trace=parameters.value("trace",False)
+content=parameters.value("content",False)
 debugjets=parameters.value("debugjets",False)
 debugweights=parameters.value("debugweights",False)
 
@@ -83,6 +84,10 @@ if trace:
 
 # setup makeTree modules
 process = theMaker.makeTreeFromMiniAOD(process)
+
+if content:
+    process.content = cms.EDAnalyzer("EventContentAnalyzer")
+    process.WriteTree += process.content
 
 producer_types_to_debug = []
 # to check user floats and discriminators
