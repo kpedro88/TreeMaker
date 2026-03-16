@@ -149,6 +149,7 @@ class maker:
         if chirp_env in os.environ and os.environ[chirp_env] and len(self.readFiles)==1:
             key = "ChirpTreeMakerReadFiles"
             value = "\"" + ",".join(self.readFiles) + "\""
+            proc = None
             try:
                 chirp_command = "condor_chirp set_job_attr_delayed " + key + " " + value
                 if self.verbose:
@@ -156,10 +157,11 @@ class maker:
                 proc = subprocess.Popen(chirp_command.split(), shell = False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 outs, errs = proc.communicate()
             except Exception as e:
-                proc.kill()
+                if proc:
+                    proc.kill()
                 print "An exception occurred when adding classad {}: {}".format(key,e)
             finally:
-                if proc.returncode:
+                if proc and proc.returncode:
                     # TODO: Right now this is fairly permissive. We may want to make this an exception in the future.
                     print "WARNING::condor_chirp failed to set the attribute \'" + key + "\'" 
                 else:
